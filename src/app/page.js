@@ -1,6 +1,7 @@
 'use client'; 
-import Movielist from '@/components/MovieList';
+import Movielist from '@/components/MovieList/MovieList';
 import './globals.css';
+import MovieCard from '@/components/MovieCard/MovieCard';
 
 export default function Home() {
     return(
