@@ -1,5 +1,4 @@
-'use client'; // I assume you meant 'use strict'
-import { useState, useEffect } from 'react';
+'use client'; 
 import Movielist from '@/components/MovieList';
 import './globals.css';
 
