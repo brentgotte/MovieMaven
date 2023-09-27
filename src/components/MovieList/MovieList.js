@@ -1,5 +1,6 @@
-'use client'; // I assume you meant 'use strict'
+'use client';
 import { useState, useEffect } from 'react';
+import MovieCard from '../MovieCard/MovieCard';
 export default function Movielist() {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -10,6 +11,7 @@ export default function Movielist() {
             const data = await response.json();
             setMovies(data.results);
             setLoading(false);
+            console.log(data.results);
         };
 
         fetchMovies();
@@ -21,15 +23,16 @@ export default function Movielist() {
 
     return (
         <>  
-            <h1 className='text-3xl font-bold text-center mb-10'>Popular Movies</h1>
+        
+               <h1 className='text-3xl font-bold text-center mb-10'>Popular Movies</h1>
             <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 grid gap-4  '>
-                {movies.map(movie => (
-                    <div key={movie.id}> 
-                        <p className=''>{movie.title}</p>
-                        <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} width={100} height={100} />
-                    </div>
-                ))}
-            </div>
+            {movies.slice(0, 20).map(movie => (
+    <div key={movie.id}> 
+            <MovieCard title={movie.title} image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} overview={movie.overview} releasedate={movie.release_date} rating={movie.vote_average}/>
+    </div>
+))}
+
+            </div> 
         </>
     );
 }
