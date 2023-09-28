@@ -5,30 +5,32 @@ import Image from 'next/image';
 export default function Navbar() {
   return (
     <>
-      <div className="flex justify-between items-center p-4 bg-gray-800">
+      <div className="flex justify-between items-center p-4  ">
         {/* This can be a logo or brand name */}
+        <div className=' rounded-md'>
         <img src='/Logo.png' alt='logo' id='logo'  />
+        </div>
 
 
         <ul className="flex space-x-4">
           <li>
             <Link href="#home">
-              <p className="text-white hover:text-blue-400">Home</p>
+              <p className="text-white hover:text-blue-400 underline">Home</p>
             </Link>
           </li>
           <li>
             <Link href="#movies">
-              <p className="text-white hover:text-blue-400">Movies</p>
+              <p className="text-white hover:text-blue-400 underline">Movies</p>
             </Link>
           </li>
           <li>
             <Link href="#community">
-              <p className="text-white hover:text-blue-400">Community</p>
+              <p className="text-white hover:text-blue-400 underline">Community</p>
             </Link>
           </li>
           <li>
             <Link href="#profile">
-              <p className="text-white hover:text-blue-400">Profile</p>
+              <p className="text-white hover:text-blue-400 underline">Profile</p>
             </Link>
           </li>
         </ul>
