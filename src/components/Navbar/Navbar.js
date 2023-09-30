@@ -1,16 +1,18 @@
 'use client';
 import Link from 'next/link';
-import Image from 'next/image';
+// import Image from 'next/image';
+// import styles from './Navbar.module.css';
+
+
 
 export default function Navbar() {
   return (
     <>
-      <div className="flex justify-between items-center p-4  ">
+      <div className={`flex justify-between items-center p-4 `}>
         {/* This can be a logo or brand name */}
-        <div className=' rounded-md'>
+        <div className='rounded-md'>
         <img src='/Logo.png' alt='logo' id='logo'  />
         </div>
-
 
         <ul className="flex space-x-4">
           <li>
