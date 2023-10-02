@@ -31,11 +31,14 @@ export default function Moviecarousel({ movies }) {
 
   return (
     <>
-      <div id="default-carousel" className={`relative w-full overflow-hidden rounded-md flex space-x-4 justify-center transition-opacity duration-${animationDuration} ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-      
+    
+      <div id="default-carousel" className={`relative w-full overflow-hidden  rounded-md flex space-x-4 justify-center transition-opacity duration-${animationDuration} ${isAnimating ? 'opacity-0' : 'opacity-100' }`}>       
         {displayedMovies.map((movie) => (
-          <div key={movie.id} className="w-52 h-72 shadow-lg"> 
-            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="w-full h-full object-cover" alt={movie.title}/> 
+          <div key={movie.id} className="w-52 h-72 shadow-lg mb-12 " >
+             <div className='hover:opacity-25'>
+            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="w-full h-full object-cover  " alt={movie.title}/> 
+            <p>{movie.title}</p>
+            </div>
           </div>
         ))}
         
