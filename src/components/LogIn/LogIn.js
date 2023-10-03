@@ -14,7 +14,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  height: 400,
+  height: 450,
   bgcolor: "background.paper",
   border: "4px solid none",
   borderRadius: "10px",
@@ -81,18 +81,18 @@ export default function LogIn() {
                 />
               </div>
             </div>
-            <div className="flex justify-center pt-10">
-              <div className="pr-3">
-                <Button className="bg-blue-500 hover:bg-blue-400 text-white font-semibold border-blue-700 hover:border-blue-500 rounded w-30 h-7 shadow-md">
-                  Log In
+            <div className="flex flex-col pt-10">
+              <div>
+                <Button className="bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded w-20 h-7 shadow-md">
+                  Sign Up
                 </Button>
               </div>
-              <div>
-                <Link href="/signup.js">
-                  <Button className="bg-white hover:bg-gray-300 text-gray-800 font-semibold border-blue-700 rounded w-30 h-7 shadow-md">
-                    Sign Up
-                  </Button>
-                </Link>
+              <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
+              <div className="text-black text-xs">
+                Don't have an account?{" "}
+                <a href="signup" className="underline">
+                  Create one!
+                </a>
               </div>
             </div>
           </div>
