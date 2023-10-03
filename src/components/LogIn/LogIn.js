@@ -89,7 +89,7 @@ export default function LogIn() {
             </div>
             <div className="flex flex-col pt-10">
               <div>
-                <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+                <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
                   Sign Up
                 </button>
               </div>
