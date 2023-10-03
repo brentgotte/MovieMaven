@@ -29,17 +29,23 @@ export default function LogIn() {
 
   return (
     <>
-      <Button
-        className="bg-blue-500 hover:bg-blue-400 text-white border-b-4 font-semibold border-blue-700 hover:border-blue-500 rounded w-30 h-7"
-        onClick={handleOpen}
-      >
-        Log In
-      </Button>
-      <Link href="signup">
-        <Button className="bg-white hover:bg-gray-300 text-gray-800 font-semibold border-blue-700 rounded w-30 h-7 shadow-md">
-          Sign Up
-        </Button>
-      </Link>
+      <div className="flex">
+        <div className="pr-4">
+          <button
+            className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded"
+            onClick={handleOpen}
+          >
+            Log In
+          </button>
+        </div>
+        <div>
+          <Link href="signup">
+            <button className="bg-white hover:bg-gray-300 text-black font-bold py-2 px-4 border-b-4 border-gray-500 hover:border-gray-400 duration-300 ease-in-out rounded">
+              Sign Up
+            </button>
+          </Link>
+        </div>
+      </div>
       <Modal
         open={open}
         aria-labelledby="modal-modal-title"
@@ -83,9 +89,9 @@ export default function LogIn() {
             </div>
             <div className="flex flex-col pt-10">
               <div>
-                <Button className="bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded w-20 h-7 shadow-md">
+                <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
                   Sign Up
-                </Button>
+                </button>
               </div>
               <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
               <div className="text-black text-xs">

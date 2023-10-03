@@ -2,6 +2,7 @@
 import Link from 'next/link';
 // import Image from 'next/image';
 // import styles from './Navbar.module.css';
+import LogIn from '@/components/LogIn/LogIn';
 
 
 
@@ -37,9 +38,8 @@ export default function Navbar() {
           </li>
         </ul>
 
-        <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-          Login
-        </button>
+        
+        <LogIn />
       </div>
     </>
   );

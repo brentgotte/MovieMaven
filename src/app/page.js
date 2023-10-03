@@ -1,8 +1,6 @@
 'use client'; 
 import Movielist from '@/components/MovieList/MovieList';
-import LogIn from '@/components/LogIn/LogIn';
 import './globals.css';
-import Moviecarousel from '@/components/MovieCarousel/Moviecarousel';
 import Carouselcall from '@/components/Carouselcall/Carouselcall';
 
 export default function Home() {
