@@ -14,7 +14,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  height: 450,
+  height: screen,
   bgcolor: "background.paper",
   border: "4px solid none",
   borderRadius: "10px",
@@ -27,23 +27,41 @@ export default function LogIn() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [openSignUp, setOpenSignUp] = React.useState(false);
+  const handleOpenSignUp = () => setOpenSignUp(true);
+  const handleCloseSignUp = () => setOpenSignUp(false);
+
+  const openLogInModal = () => {
+    handleOpen();
+    handleCloseSignUp();
+  };
+
+  const openSignUpModal = () => {
+    handleOpenSignUp();
+    handleClose();
+  };
+
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   return (
     <>
       <div className="flex">
         <div className="pr-4">
           <button
-            className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded"
+            className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-1 px-3 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded"
             onClick={handleOpen}
           >
             Log In
           </button>
         </div>
         <div>
-          <Link href="signup">
-            <button className="bg-white hover:bg-gray-300 text-black font-bold py-2 px-4 border-b-4 border-gray-500 hover:border-gray-400 duration-300 ease-in-out rounded">
-              Sign Up
-            </button>
-          </Link>
+          <button
+            className="bg-white hover:bg-gray-300 text-black font-bold py-1 px-3 border-b-4 border-gray-500 hover:border-gray-400 duration-300 ease-in-out rounded"
+            onClick={handleOpenSignUp}
+          >
+            Sign Up
+          </button>
         </div>
       </div>
       <Modal
@@ -63,8 +81,11 @@ export default function LogIn() {
                 Log In!
               </Typography>
             </div>
-            <div className="absolute top-5 right-5 hover:cursor-pointer text-black hover:bg-gray-300 p-2 rounded">
-              <AiOutlineClose onClick={handleClose} />
+            <div
+              className="absolute top-5 right-5 hover:cursor-pointer text-black hover:bg-gray-300 p-2 rounded"
+              onClick={handleClose}
+            >
+              <AiOutlineClose />
             </div>
 
             <div className="pt-6">
@@ -90,15 +111,87 @@ export default function LogIn() {
             <div className="flex flex-col pt-10">
               <div>
                 <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
-                  Sign Up
+                  Log In
                 </button>
               </div>
               <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
               <div className="text-black text-xs">
                 Don't have an account?{" "}
-                <a href="signup" className="underline">
-                  Create one!
-                </a>
+                <button className="underline hover:text-blue-500 pb-6" onClick={openSignUpModal}>
+                  Sign Up!
+                </button>
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openSignUp}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="text-center">
+            <div className="flex items-center justify-center">
+              <Typography
+                id="modal-modal-title"
+                className="text-black"
+                variant="h5"
+                component="h2"
+              >
+                Sign Up!
+              </Typography>
+            </div>
+            <div
+              className="absolute top-5 right-5 hover:cursor-pointer text-black hover:bg-gray-300 p-2 rounded"
+              onClick={handleCloseSignUp}
+            >
+              <AiOutlineClose />
+            </div>
+
+            <div className="pt-6">
+            <div className="py-5">
+                <TextField
+                  required
+                  id="standard-input"
+                  label="Email"
+                  variant="standard"
+                  type="email"
+                />
+              </div>
+              <div className="pb-5">
+                <TextField
+                  required
+                  id="standard-input"
+                  label="Username"
+                  variant="standard"
+                  type="text"
+                />
+              </div>
+              <div>
+                <TextField
+                  required
+                  id="standard-password-input"
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col pt-10">
+              <div>
+                <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
+                  Sign Up
+                </button>
+              </div>
+              <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
+              <div className="text-black text-xs">
+                Already have an account?{" "}
+                <button className="underline hover:text-blue-500 pb-6" onClick={openLogInModal}>
+                  Log in!
+                </button>
               </div>
             </div>
           </div>

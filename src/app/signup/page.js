@@ -1,5 +1,6 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
+import Link from "next/link";
 
 export default () => {
   return (
@@ -42,7 +43,7 @@ export default () => {
             </div>
             <hr className="my-6 h-0.5 border-t-0 bg-black opacity-5"/>
             <div className="text-black text-xs">
-              Already have an account? <a href="/" className="underline">Login</a>
+              Already have an account? <Link href="/" className="underline">Login</Link>
             </div>
           </div>
         </div>
