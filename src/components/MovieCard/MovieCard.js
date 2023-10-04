@@ -1,10 +1,35 @@
 import * as React from "react";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import { AiOutlineClose } from "react-icons/ai";
+import { duration } from "@mui/material";
+
+
 
 export default function MovieCard(props) {
+  const [open, setOpen] = React.useState(false);
+  const handleMovieOpen = () => setOpen(true);
+  const handleMovieClose = () => setOpen(false);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: screen,
+    height: screen,
+    bgcolor: "background.paper",
+    border: "4px solid none",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
-    <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500">
+    <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500" onClick={handleMovieOpen}>
       <CardMedia
         className="duration-500 hover:opacity-20"
         sx={{ height: 450 }}
@@ -32,6 +57,16 @@ export default function MovieCard(props) {
 
         <p>Rating: {props.rating}</p>
       </div>
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          
+            <Image />
+        </Box>
+      </Modal>
     </div>
   );
 }
