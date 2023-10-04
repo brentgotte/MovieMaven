@@ -1,10 +1,12 @@
+'use client';
 import * as React from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "next/link";
+import { useState, useEffect } from "react";
+// import { cookies } from 'next/headers'
+// import { login, signUp } from '../lib/getUsers';
 
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -23,6 +25,15 @@ const style = {
 };
 
 export default function LogIn() {
+  
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLogin, setIsLogin] = useState(true); // toggle between login and signup
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,8 +52,6 @@ export default function LogIn() {
     handleClose();
   };
 
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
   return (
     <>
@@ -117,7 +126,10 @@ export default function LogIn() {
               <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
               <div className="text-black text-xs">
                 Don't have an account?{" "}
-                <button className="underline hover:text-blue-500 pb-6" onClick={openSignUpModal}>
+                <button
+                  className="underline hover:text-blue-500 pb-6"
+                  onClick={openSignUpModal}
+                >
                   Sign Up!
                 </button>
               </div>
@@ -150,49 +162,66 @@ export default function LogIn() {
               <AiOutlineClose />
             </div>
 
-            <div className="pt-6">
-            <div className="py-5">
-                <TextField
-                  required
-                  id="standard-input"
-                  label="Email"
-                  variant="standard"
-                  type="email"
-                />
+            <form>
+              <div className="pt-6">
+                <div className="py-5">
+                  <TextField
+                    required
+                    id="standard-input"
+                    label="Email"
+                    variant="standard"
+                    type="email"
+                    value={email}
+                    name="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="pb-5">
+                  <TextField
+                    required
+                    id="standard-input"
+                    label="Username"
+                    variant="standard"
+                    type="text"
+                    value={username}
+                    name="username"
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <TextField
+                    required
+                    id="standard-password-input"
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                    variant="standard"
+                    value={password}
+                    name="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
               </div>
-              <div className="pb-5">
-                <TextField
-                  required
-                  id="standard-input"
-                  label="Username"
-                  variant="standard"
-                  type="text"
-                />
-              </div>
-              <div>
-                <TextField
-                  required
-                  id="standard-password-input"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  variant="standard"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col pt-10">
-              <div>
-                <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
+              <div className="pt-8">
+                <button
+                  type="submit"
+                  onClick={handleCloseSignUp}
+                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-1 px-3 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded"
+                >
                   Sign Up
                 </button>
               </div>
-              <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
-              <div className="text-black text-xs">
-                Already have an account?{" "}
-                <button className="underline hover:text-blue-500 pb-6" onClick={openLogInModal}>
-                  Log in!
-                </button>
-              </div>
+            </form>
+            <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
+            <div className="text-black text-xs">
+              Already have an account?{" "}
+              <button
+                name="SignUpBtn"
+                className="underline hover:text-blue-500 pb-6"
+                onClick={openLogInModal}
+              >
+                Log in!
+              </button>
             </div>
           </div>
         </Box>
