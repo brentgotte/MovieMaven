@@ -17,18 +17,13 @@ export default function Navbar() {
 
         <ul className="flex space-x-4">
           <li>
-            <Link href="#home">
+            <Link href="/">
               <p className="text-white hover:text-blue-400 underline">Home</p>
             </Link>
           </li>
           <li>
             <Link href="#movies">
               <p className="text-white hover:text-blue-400 underline">Movies</p>
-            </Link>
-          </li>
-          <li>
-            <Link href="#community">
-              <p className="text-white hover:text-blue-400 underline">Community</p>
             </Link>
           </li>
           <li>
