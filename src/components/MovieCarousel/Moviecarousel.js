@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MdSkipPrevious, MdSkipNext } from 'react-icons/md';
 
 export default function Moviecarousel({ movies }) {
+  console.log(movies);
   const [activeChunk, setActiveChunk] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const chunkSize = 4;
@@ -32,9 +33,9 @@ export default function Moviecarousel({ movies }) {
   return (
     <>
     
-      <div id="default-carousel" className={`relative w-full overflow-hidden  rounded-md flex space-x-4 justify-center`}>       
+      <div id="default-carousel" className={`relative w-full overflow-hidden rounded-md flex space-x-4 justify-center transition-slide duration-${animationDuration} ${isAnimating ? 'opacity-0' : 'opacity-100' }`}>       
         {displayedMovies.map((movie) => (
-          <div key={movie.id} className="w-52 h-72 shadow-lg mb-12 " >
+          <div key={movie.id} className="w-52 h-72 shadow-lg mb-12" >
              <div>
             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="w-full h-full object-cover hover:opacity-25 hover:cursor-pointer duration-300  " alt={movie.title}/> 
             <p>{movie.title}</p>
