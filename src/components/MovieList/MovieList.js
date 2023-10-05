@@ -1,23 +1,6 @@
 import { useState, useEffect } from "react";
 import MovieCard from "../MovieCard/MovieCard";
-import supabase from "../../api/supabaseClient";
 export default function Movielist() {
-  const [fetchError, setFetchError] = useState(null);
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      let { data, error } = await supabase.from("users").select("*");
-      if (error) {
-        setFetchError(error);
-      } else {
-        setUsers(data);
-        console.log(data);
-      }
-    };
-    fetchUsers();
-  }, []);
-
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,13 +42,6 @@ export default function Movielist() {
 
   return (
     <>
-     {/* {users.map((user) => (
-        <div key={user.id}>
-          <h1>{user.username}</h1>
-            <h1>{user.email}</h1>
-        </div>
-      ))     */}
-    {/* } */}
       <h1 className="text-3xl font-bold text-center mt-10 mb-4">All movies</h1>
 
       <div className="grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 grid gap-4 px-8 md:px-16 lg:px-32">

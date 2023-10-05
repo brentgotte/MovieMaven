@@ -15,7 +15,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  height: screen,
+  height: 450,
   bgcolor: "background.paper",
   border: "4px solid none",
   borderRadius: "10px",
@@ -53,14 +53,15 @@ export default function LogIn() {
     });
   
     if (error) {
-      
       console.error("Error logging in:", error.message);
+
      
     } else {
         console.log(`hello ${email}!`)
         handleClose();
     }
   }
+  
 
   async function handleSignUp() {
     const { user, error } = await supabase.auth.signUp({
@@ -75,7 +76,25 @@ export default function LogIn() {
       handleCloseSignUp();
     }
   }
+  function AlertBox({ show, onClose }) {
+    if (!show) return null;
   
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="bg-white p-5 rounded-md shadow-lg w-96">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-xl font-bold">Login Failed</h2>
+              <p className="mt-2 text-red-600">Incorrect email or password. Please try again.</p>
+            </div>
+            <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded">
+              &times;
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
 
 
