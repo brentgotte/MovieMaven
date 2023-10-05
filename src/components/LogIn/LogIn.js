@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Link from "next/link";
+import supabase from "../../api/supabaseClient";
 
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -14,7 +15,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  height: screen,
+  height: 450,
   bgcolor: "background.paper",
   border: "4px solid none",
   borderRadius: "10px",
@@ -41,8 +42,61 @@ export default function LogIn() {
     handleClose();
   };
 
+  const [email, setEmail] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  
+  async function handleLogIn() {
+    const { user, error } = await supabase.auth.signInWithPassword({
+      email: email, 
+      password: password,
+    });
+  
+    if (error) {
+      console.error("Error logging in:", error.message);
+
+     
+    } else {
+        console.log(`hello ${email}!`)
+        handleClose();
+    }
+  }
+  
+
+  async function handleSignUp() {
+    const { user, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+  
+    if (error) {
+      console.error("Error signing up:", error.message);
+      // You can also display the error to the user if you want
+    } else if (user) {
+      handleCloseSignUp();
+    }
+  }
+  function AlertBox({ show, onClose }) {
+    if (!show) return null;
+  
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="bg-white p-5 rounded-md shadow-lg w-96">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-xl font-bold">Login Failed</h2>
+              <p className="mt-2 text-red-600">Incorrect email or password. Please try again.</p>
+            </div>
+            <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded">
+              &times;
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+
 
   return (
     <>
@@ -92,14 +146,19 @@ export default function LogIn() {
               <div className="py-5">
                 <TextField
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   id="standard-input"
-                  label="Username"
+                  label="Email"
                   variant="standard"
+                  type="email"
                 />
               </div>
               <div>
                 <TextField
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   id="standard-password-input"
                   label="Password"
                   type="password"
@@ -110,7 +169,7 @@ export default function LogIn() {
             </div>
             <div className="flex flex-col pt-10">
               <div>
-                <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
+                <button  onClick={handleLogIn} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
                   Log In
                 </button>
               </div>
@@ -154,6 +213,8 @@ export default function LogIn() {
             <div className="py-5">
                 <TextField
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   id="standard-input"
                   label="Email"
                   variant="standard"
@@ -163,6 +224,8 @@ export default function LogIn() {
               <div className="pb-5">
                 <TextField
                   required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   id="standard-input"
                   label="Username"
                   variant="standard"
@@ -172,6 +235,8 @@ export default function LogIn() {
               <div>
                 <TextField
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   id="standard-password-input"
                   label="Password"
                   type="password"
@@ -182,7 +247,7 @@ export default function LogIn() {
             </div>
             <div className="flex flex-col pt-10">
               <div>
-                <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
+                <button onClick={handleSignUp} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
                   Sign Up
                 </button>
               </div>
