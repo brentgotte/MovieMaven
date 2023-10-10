@@ -44,24 +44,22 @@ export default function Movielist() {
     <>
       <h1 className="text-3xl font-bold text-center mt-10 mb-4">All movies</h1>
 
-      <div className="grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 grid gap-4 px-8 md:px-16 lg:px-32">
-        {displayedMovies.map((movie) => (
-          <div key={movie.id}>
-            <MovieCard
-              title={movie.title}
-              image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              overview={movie.overview}
-              releasedate={movie.release_date}
-              rating={movie.vote_average}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center mt-6">
-        <button onClick={() => handlePageChange("prev")}>Previous</button>
-        <span className="mx-4">{currentPage}</span>
-        <button onClick={() => handlePageChange("next")}>Next</button>
-      </div>
-    </>
-  );
+    return (
+        <>  
+            <h1 className='text-3xl font-bold text-center mt-10 mb-4'>All Movies</h1>
+            <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-4 px-8 md:px-16 lg:px-32'>
+                {displayedMovies.map(movie => (
+                    <div key={movie.id}> 
+                        <MovieCard movie={movie} />
+                    </div>
+                ))}
+            </div>
+            <div className="flex justify-center mt-6">
+                <button onClick={() => handlePageChange("prev")}>Previous</button>
+                <span className="mx-4">{currentPage}</span>
+                <button onClick={() => handlePageChange("next")}>Next</button>
+            </div>
+        </>
+    );
+
 }
