@@ -1,40 +1,48 @@
-import { useState, useEffect } from 'react';
-import MovieCard from '../MovieCard/MovieCard';
-
+import { useState, useEffect } from "react";
+import MovieCard from "../MovieCard/MovieCard";
 export default function Movielist() {
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const moviesPerPage = 20;
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const moviesPerPage = 20;
 
-    useEffect(() => {
-        const fetchMovies = async () => {
-            let fetchedMovies = [];
-            for (let i = 1; i <= 5; i++) {
-                const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=bdeba0f284b7d753826f7cb651d9cb90&language=en-US&page=${i}`);
-                const data = await response.json();
-                fetchedMovies = fetchedMovies.concat(data.results);
-            }
-            setMovies(fetchedMovies);
-            setLoading(false);
-        };
-
-        fetchMovies();
-    }, []);
-
-    const handlePageChange = (direction) => {
-        if (direction === "next" && currentPage < 5) {
-            setCurrentPage(currentPage + 1);
-        } else if (direction === "prev" && currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
+  useEffect(() => {
+    const fetchMovies = async () => {
+      let fetchedMovies = [];
+      for (let i = 1; i <= 5; i++) {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/popular?api_key=bdeba0f284b7d753826f7cb651d9cb90&language=en-US&page=${i}`
+        );
+        const data = await response.json();
+        fetchedMovies = fetchedMovies.concat(data.results);
+      }
+      setMovies(fetchedMovies);
+      setLoading(false);
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    fetchMovies();
+  }, []);
 
-    const displayedMovies = movies.slice((currentPage - 1) * moviesPerPage, currentPage * moviesPerPage);
+  const handlePageChange = (direction) => {
+    if (direction === "next" && currentPage < 5) {
+      setCurrentPage(currentPage + 1);
+    } else if (direction === "prev" && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const displayedMovies = movies.slice(
+    (currentPage - 1) * moviesPerPage,
+    currentPage * moviesPerPage
+  );
+
+  return (
+    <>
+      <h1 className="text-3xl font-bold text-center mt-10 mb-4">All movies</h1>
 
     return (
         <>  
@@ -53,4 +61,5 @@ export default function Movielist() {
             </div>
         </>
     );
+
 }
