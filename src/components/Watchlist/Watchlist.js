@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { MdSkipPrevious, MdSkipNext } from 'react-icons/md';
 
@@ -31,14 +32,15 @@ export default function watchlist({ movies }) {
 
   return (
     <>
-    
-      <div id="default-carousel" className={`relative w-full overflow-hidden  rounded-md flex space-x-4 justify-center transition-opacity duration-${animationDuration} ${isAnimating ? 'opacity-0' : 'opacity-100' }`}>       
+     
+      <div id="default-carousel" className={`relative w-full overflow-hidden  rounded-md flex space-x-4 justify-center transition-opacity duration-${animationDuration} ${isAnimating ? 'opacity-0' : 'opacity-100' }`}>      
         {displayedMovies.map((movie) => (
           <div key={movie.id} className="w-52 h-72 shadow-lg mb-12 " >
              <div className='hover:opacity-25'>
             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="w-full h-full object-cover  " alt={movie.title}/> 
             <p>{movie.title}</p>
             </div>
+            
           </div>
         ))}
         
@@ -49,6 +51,9 @@ export default function watchlist({ movies }) {
         <button type="button" className="absolute top-1/2 right-40 z-30 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2" onClick={handleNext}>
           <MdSkipNext/>
         </button>
+        <Link href='/mylist'>
+        <p className='underline'> View all</p> 
+        </Link>
       </div>
     </>
   );
