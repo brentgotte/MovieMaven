@@ -43,9 +43,6 @@ export default function Movielist() {
   return (
     <>
       <h1 className="text-3xl font-bold text-center mt-10 mb-4">All movies</h1>
-
-    return (
-        <>  
             <h1 className='text-3xl font-bold text-center mt-10 mb-4'>All Movies</h1>
             <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-4 px-8 md:px-16 lg:px-32'>
                 {displayedMovies.map(movie => (
@@ -60,6 +57,6 @@ export default function Movielist() {
                 <button onClick={() => handlePageChange("next")}>Next</button>
             </div>
         </>
-    );
-
+    );   
 }
+
