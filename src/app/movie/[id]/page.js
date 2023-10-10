@@ -1,7 +1,8 @@
-import { supabase } from 'src/lib/helper/supabase'
+import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/helper/supabase'
 
 export default function Page({ movie }) {
-  console.log(movie.id)
   return (
     <>
       
