@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import MovieCard from '../MovieCard/MovieCard';
+import SearchBar from '../SearchBar/searchBar';
+
 export default function Movielist() {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,7 +25,8 @@ export default function Movielist() {
 
     return (
         <>  
-        
+
+            <SearchBar />
                <h1 className='text-3xl font-bold text-center mb-10'>Popular Movies</h1>
             <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 grid gap-4  '>
             {movies.slice(0, 20).map(movie => (
