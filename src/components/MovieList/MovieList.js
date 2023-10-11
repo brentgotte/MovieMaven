@@ -1,3 +1,5 @@
+'use client';
+import SearchBar from '../SearchBar/searchBar';
 import { useState, useEffect } from "react";
 import MovieCard from "../MovieCard/MovieCard";
 export default function Movielist() {
@@ -31,9 +33,22 @@ export default function Movielist() {
     }
   };
 
+    return (
+        <>  
+
+            <SearchBar />
+               <h1 className='text-3xl font-bold text-center mb-10'>Popular Movies</h1>
+            <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 grid gap-4  '>
+            {movies.slice(0, 20).map(movie => (
+    <div key={movie.id}> 
+            <MovieCard title={movie.title} image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} overview={movie.overview} releasedate={movie.release_date} rating={movie.vote_average}/>
+    </div>
+))}
+
   if (loading) {
     return <div>Loading...</div>;
   }
+
 
   const displayedMovies = movies.slice(
     (currentPage - 1) * moviesPerPage,
