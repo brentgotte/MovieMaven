@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import supabase from "../../api/supabaseClient";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
 import { AiOutlineClose } from "react-icons/ai";
 
 const style = {
@@ -23,6 +23,7 @@ const style = {
 };
 
 export default function LogIn() {
+  const [errorMessage, setErrorMessage] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -44,63 +45,36 @@ export default function LogIn() {
   const [email, setEmail] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  
+
   async function handleLogIn() {
     const { user, error } = await supabase.auth.signInWithPassword({
-      email: email, 
+      email: email,
       password: password,
     });
-  
+
     if (error) {
+      setErrorMessage(true);
       console.error("Error logging in:", error.message);
-
-     
     } else {
-        console.log(`hello ${email}!`)
-        Cookie.set('email', email, { expires: 7 });
-
-        handleClose();
+      console.log(`hello ${email}!`);
+      Cookie.set("email", email, { expires: 7 });
+      handleClose();
+      window.location.reload();
     }
-    const userEmail = Cookie.get('email');
- 
-    console.log(userEmail);
   }
-  
 
   async function handleSignUp() {
     const { user, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
-  
+
     if (error) {
       console.error("Error signing up:", error.message);
-      // You can also display the error to the user if you want
     } else if (user) {
       handleCloseSignUp();
     }
   }
-  function AlertBox({ show, onClose }) {
-    if (!show) return null;
-  
-    return (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white p-5 rounded-md shadow-lg w-96">
-          <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-xl font-bold">Login Failed</h2>
-              <p className="mt-2 text-red-600">Incorrect email or password. Please try again.</p>
-            </div>
-            <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded">
-              &times;
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
-
 
   return (
     <>
@@ -173,14 +147,24 @@ export default function LogIn() {
             </div>
             <div className="flex flex-col pt-10">
               <div>
-                <button  onClick={handleLogIn} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
+                <button
+                  onClick={handleLogIn}
+                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded"
+                >
                   Log In
                 </button>
               </div>
+
+              {errorMessage && (
+                <p className="text-red-500">Incorrect email or password </p>
+              )}
               <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
               <div className="text-black text-xs">
                 Don't have an account?{" "}
-                <button className="underline hover:text-blue-500 pb-6" onClick={openSignUpModal}>
+                <button
+                  className="underline hover:text-blue-500 pb-6"
+                  onClick={openSignUpModal}
+                >
                   Sign Up!
                 </button>
               </div>
@@ -214,7 +198,7 @@ export default function LogIn() {
             </div>
 
             <div className="pt-6">
-            <div className="py-5">
+              <div className="py-5">
                 <TextField
                   required
                   value={email}
@@ -251,14 +235,20 @@ export default function LogIn() {
             </div>
             <div className="flex flex-col pt-10">
               <div>
-                <button onClick={handleSignUp} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded">
+                <button
+                  onClick={handleSignUp}
+                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded"
+                >
                   Sign Up
                 </button>
               </div>
               <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
               <div className="text-black text-xs">
                 Already have an account?{" "}
-                <button className="underline hover:text-blue-500 pb-6" onClick={openLogInModal}>
+                <button
+                  className="underline hover:text-blue-500 pb-6"
+                  onClick={openLogInModal}
+                >
                   Log in!
                 </button>
               </div>
