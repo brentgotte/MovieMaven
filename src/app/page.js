@@ -6,7 +6,12 @@ import Watchcall from '@/components/Watchlist/Watchcall';
 import Footer from '@/components/Footer/Footer';
 
 export default function Home() {
-    const isLoggedIn = false
+
+    const isLoggedIn = document.cookie.indexOf('email') !== -1;
+    console.log(isLoggedIn);
+
+
+    
     return(
         <div>
             

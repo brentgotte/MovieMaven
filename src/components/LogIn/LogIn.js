@@ -4,9 +4,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "next/link";
 import supabase from "../../api/supabaseClient";
-
+import Cookie from 'js-cookie';
 import { AiOutlineClose } from "react-icons/ai";
 
 const style = {
@@ -58,8 +57,13 @@ export default function LogIn() {
      
     } else {
         console.log(`hello ${email}!`)
+        Cookie.set('email', email, { expires: 7 });
+
         handleClose();
     }
+    const userEmail = Cookie.get('email');
+ 
+    console.log(userEmail);
   }
   
 

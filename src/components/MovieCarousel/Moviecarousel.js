@@ -32,7 +32,6 @@ export default function Moviecarousel({ movies }) {
 
   return (
     <>
-    
       <div id="default-carousel" className={`relative w-full overflow-hidden rounded-md flex space-x-4 justify-center transition-slide duration-${animationDuration} ${isAnimating ? 'opacity-0' : 'opacity-100' }`}>       
         {displayedMovies.map((movie) => (
           <div key={movie.id} className="w-52 h-72 shadow-lg mb-12" >

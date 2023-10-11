@@ -11,7 +11,7 @@ export default function Carouselcall() {
             const data = await response.json();
             setMovies(data.results);
             setLoading(false);
-            // console.log(data.results);
+           
         };
 
         fetchMovies();
