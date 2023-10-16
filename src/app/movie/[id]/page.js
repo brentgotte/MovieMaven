@@ -8,16 +8,11 @@ import { IoMdAddCircle } from "react-icons/io";
 
 export default function Page() {
   const pathName = usePathname();
-  const [movieID, setMovieID] = useState(null);
   const [movieData, setMovieData] = useState(null);
 
   useEffect(() => {
     const pathParts = pathName.split("/");
     const id = pathParts[2];
-
-    if (id) {
-      setMovieID(id);
-    }
 
     const getMovieData = async () => {
       const { data, error } = await supabase
@@ -39,7 +34,7 @@ export default function Page() {
   return (
     <>
       <div>
-        <div className="flex justify-evenly items-center pt-8">
+        <div className="flex justify-evenly items-center pt-8 px-10">
           <div className="bg-black p-3 rounded-lg">
             <Image
               className="rounded-lg"
