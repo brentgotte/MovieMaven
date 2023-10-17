@@ -25,6 +25,7 @@ const style = {
 export default function Page() {
   const pathName = usePathname();
   const [movieData, setMovieData] = useState(null);
+  const [allGenres, setAllGenres] = useState(null);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -46,32 +47,34 @@ export default function Page() {
         setMovieData(data);
       }
     };
+    const getAllGenres = async () => {
+      const { data, error } = await supabase
+        .from("movies")
+        .select(`
+          genre_ids_0,
+          genre_ids_1,
+          genre_ids_2,
+          genre_ids_3,
+          genre_ids_4,
+          genre_ids_5
+        `)
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error fetching movie data:", error);
+      } else {
+        setAllGenres(data);
+        console.log(data);
+      }
+    };
 
     getMovieData();
+    getAllGenres();
   }, [pathName]);
-  // console.log(movieData);
 
-  // const [allGenres, setAllGenres] = useState(null);
 
-  // useEffect(() => {
-  //   const pathParts = pathName.split("/");
-  //   const id = pathParts[2];
+  
 
-  //   const getAllGenres = async () => {
-  //     const { data, error } = await supabase
-  //       .from("movies")
-  //       .select("genre_ids/0")
-  //       .eq("id", id);
-
-  //     if (error) {
-  //       console.error("Error fetching movie data:", error);
-  //     } else {
-  //       setAllGenres(data);
-  //     }
-  //   };
-  //   getAllGenres();
-  //   console.log(allGenres);
-  // });
   return (
     <>
       <div>
@@ -82,6 +85,8 @@ export default function Page() {
               src={`https://image.tmdb.org/t/p/w500${movieData?.[0]?.poster_path}`}
               width={400}
               height={750}
+              alt="movie poster"
+              priority
             />
           </div>
           <div className="inline-block w-1/3 bg-black bg-opacity-20 rounded-lg p-8">
