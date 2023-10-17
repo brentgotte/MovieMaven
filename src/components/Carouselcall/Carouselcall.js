@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
 import Moviecarousel from '../MovieCarousel/Moviecarousel';
+import supabase from '@/api/supabaseClient';
 
 export default function Carouselcall() {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchMovies = async () => {
-            const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=bdeba0f284b7d753826f7cb651d9cb90&language=en-US&page=1`);
-            const data = await response.json();
-            setMovies(data.results);
+        supabase.from("movies").select("*")
+          .then((res) => {
+            const data = res.data.slice(0, 20);
+            console.log(data);
+            setMovies(data);
             setLoading(false);
-           
-        };
-
-        fetchMovies();
-    }, []);
+          });
+      }, []);
 
     // Helper function to chunk the movies array
     const chunkArray = (array, size) => {

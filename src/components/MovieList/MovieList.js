@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 import MovieCard from "../MovieCard/MovieCard";
+import supabase from '../../api/supabaseClient'
 
 export default function Movielist() {
   const [movies, setMovies] = useState([]);
@@ -11,20 +12,13 @@ export default function Movielist() {
 
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      let fetchedMovies = [];
-      for (let i = 1; i <= 5; i++) {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/popular?api_key=bdeba0f284b7d753826f7cb651d9cb90&language=en-US&page=${i}`
-        );
-        const data = await response.json();
-        fetchedMovies = fetchedMovies.concat(data.results);
-      }
-      setMovies(fetchedMovies);
-      setLoading(false);
-    };
-
-    fetchMovies();
+    supabase.from("movies").select("*")
+      .then((res) => {
+        const data = res.data.slice(0, 20);
+        console.log(data);
+        setMovies(data);
+        setLoading(false);
+      });
   }, []);
 
   const handlePageChange = (direction) => {
@@ -55,19 +49,15 @@ export default function Movielist() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-center mb-10">Popular Movies</h1>
-      <div className="grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-4 px-8 md:px-16 lg:px-32">
-        {searchResults.length > 0
-          ? searchResults.map((movie) => (
-            <div key={movie.id}>
-              <MovieCard movie={movie} />
-            </div>
-          ))
-          : displayedMovies.map((movie) => (
-            <div key={movie.id}>
-              <MovieCard movie={movie} />
-            </div>
-          ))}
+
+      <h1 className='text-3xl font-bold text-center mb-10'>Popular Movies</h1>
+      <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-4 px-8 md:px-16 lg:px-32'>
+        {movies.map(movie => (
+          <div key={movie.id}> 
+            <MovieCard movie={movie} />
+          </div>
+        ))}
+
       </div>
       <div className="flex justify-center mt-6">
         <button onClick={() => handlePageChange("prev")}>Previous</button>
