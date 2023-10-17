@@ -1,63 +1,43 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from 'react';
 
+const SearchBar = ({ onSearch, searchResults }) => {
+  const [query, setQuery] = useState('');
 
-export default function SearchBar() {
-  const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  }));
-  
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-  
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '20ch',
-        },
-      },
-    },
-  }));
-  
+  const results = Array.isArray(searchResults) ? searchResults.slice(0, 3) : [];
+
+  const handleInputChange = (e) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+    onSearch(newQuery);
+  };
+
   return (
-    <>
-    <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <StyledInputBase
-        placeholder="Search…"
-        inputProps={{ 'aria-label': 'search' }}
+    <div className="relative z-10">
+      <input
+        type="text"
+        placeholder="Search movies..."
+        value={query}
+        onChange={handleInputChange}
+        className="bg-white border rounded-md px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
       />
-    </Search>
-    </>
+      {results.length > 0 && (
+        <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-20">
+          <ul>
+            {results.map((movie) => (
+              <li key={movie.id} className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="w-10 h-10 mr-2"
+                />
+                {movie.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
-}
+};
+
+export default SearchBar;
