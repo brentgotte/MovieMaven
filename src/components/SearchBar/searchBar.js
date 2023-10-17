@@ -15,8 +15,8 @@ const SearchBar = ({ onSearch, searchResults }) => {
   };
 
   const handleMovieClick = () => {
-    setQuery('');
-    setShowResults(false);
+    setQuery(''); 
+    setShowResults(false); 
   };
 
   return (
@@ -35,7 +35,7 @@ const SearchBar = ({ onSearch, searchResults }) => {
               <li
                 key={movie.id}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
-                onClick={handleMovieClick}
+                onClick={handleMovieClick} 
               >
                 <Link href={`/movie/${movie.id}`}>
                   <span className="cursor-pointer">
@@ -57,3 +57,4 @@ const SearchBar = ({ onSearch, searchResults }) => {
 };
 
 export default SearchBar;
+
