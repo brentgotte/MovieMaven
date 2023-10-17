@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import supabase from "@/api/supabaseClient";
 import Image from "next/image";
@@ -26,6 +26,7 @@ export default function Page() {
   const pathName = usePathname();
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setAllGenres] = useState(null);
+  // if (allGenres) console.log(allGenres);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -50,31 +51,89 @@ export default function Page() {
     const getAllGenres = async () => {
       const { data, error } = await supabase
         .from("movies")
-        .select(`
+        .select(
+          `
           genre_ids_0,
           genre_ids_1,
           genre_ids_2,
           genre_ids_3,
           genre_ids_4,
           genre_ids_5
-        `)
+        `
+        )
         .eq("id", id);
 
       if (error) {
         console.error("Error fetching movie data:", error);
       } else {
         setAllGenres(data);
-        console.log(data);
       }
     };
+
+    const genreIds = [
+      allGenres?.[0],
+      allGenres?.[1],
+      allGenres?.[2],
+      allGenres?.[3],
+      allGenres?.[4],
+      allGenres?.[5],
+    ];
+    console.log(genreIds);
+
+    function mapGenreIdToGenre(genreId) {
+      switch (genreId) {
+        case 28:
+          return "Action";
+        case 12:
+          return "Adventure";
+        case 16:
+          return "Animation";
+        case 35:
+          return "Comedy";
+        case 80:
+          return "Crime";
+        case 99:
+          return "Documentary";
+        case 18:
+          return "Drama";
+        case 10751:
+          return "Family";
+        case 14:
+          return "Fantasy";
+        case 36:
+          return "History";
+        case 27:
+          return "Horror";
+        case 10402:
+          return "Music";
+        case 9648:
+          return "Mystery";
+        case 10749:
+          return "Romance";
+        case 878:
+          return "Science Fiction";
+        case 10770:
+          return "TV Movie";
+        case 53:
+          return "Thriller";
+        case 10752:
+          return "War";
+        case 37:
+          return "Western";
+        default:
+          return "Unknown Genre";
+      }
+    }
+
+    // Create an array of genre names by mapping genre IDs to genres
+    const genreNames = genreIds.map((genreId) => mapGenreIdToGenre(genreId));
+
+    // Print the genre names
+    // console.log("Genres: " + genreNames.join(", "));
 
     getMovieData();
     getAllGenres();
   }, [pathName]);
-
-
-  
-
   return (
     <>
       <div>
