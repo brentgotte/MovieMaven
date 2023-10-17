@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Cookie from 'js-cookie';
 import LogIn from '@/components/LogIn/LogIn';
-import SearchBar from '../SearchBar/SearchBar';
+import SearchBar from '../SearchBar/searchBar';
 
 export default function Navbar() {
   const Email = Cookie.get('email');
