@@ -7,6 +7,7 @@ import { AiFillStar } from "react-icons/ai";
 import { BsBookmarkStar } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import { Modal, Box, Typography, TextField } from "@mui/material";
+import ClaimButton from "@/app/mylist/parts/ClaimButton";
 
 const style = {
   position: "absolute",
@@ -129,6 +130,9 @@ export default function Page() {
               >
                 Add to watchlist!
               </Typography>
+            </div>
+            <div className="flex justify-center mt-12">
+                <ClaimButton movieId={movieData?.[0]?.id}/>
             </div>
 
             <div

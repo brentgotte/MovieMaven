@@ -8,8 +8,10 @@ export default function mylist() {
   return (
     <>
       <h1 className="text-3xl font-bold text-center mb-10">
-        {userEmail} Profile page
+        {userEmail} Watchlist
       </h1>
+
+      
     </>
   );
 }
