@@ -7,8 +7,8 @@ import Footer from '@/components/Footer/Footer';
 
 export default function Home() {
 
-    // const isLoggedIn = document.cookie.indexOf('email') !== -1;
-    // console.log(isLoggedIn);
+    const isLoggedIn = document.cookie.indexOf('email') !== -1;
+    console.log(isLoggedIn);
 
 
     
@@ -18,7 +18,7 @@ export default function Home() {
             <Carouselcall />
             <Movielist />
             <h1 className='text-3xl font-bold text-center mt-10'>Your watchlist</h1>
-            {/* {isLoggedIn ? <Watchcall /> : <p className='text-3xl font-bold text-center mb-10'>You need to log in to see your watchlist</p>} */}
+            {isLoggedIn ? <Watchcall /> : <p className='text-3xl font-bold text-center mb-10'>You need to log in to see your watchlist</p>}
             <Footer />
         </div>
     )
