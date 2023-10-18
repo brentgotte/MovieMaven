@@ -42,15 +42,16 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="#profile">
+            <Link href="/profile">
               <p className="text-white hover:text-blue-400 underline">Profile</p>
             </Link>
           </li>
         </ul>
 
           <SearchBar onSearch={handleSearch} searchResults={searchResults} />
-
+        <div>
           {!isEmailCookieSet ? <LogIn /> : <h1 className=' text-2xl text-white'> Welcome, {Email}</h1>}
+        </div>
 
       </div>
     </>
