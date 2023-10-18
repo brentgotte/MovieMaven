@@ -10,7 +10,6 @@ export default function Movielist() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const moviesPerPage = 20;
-  const [searchResults, setSearchResults] = useState([]);
 
 
   useEffect(() => {
@@ -39,14 +38,7 @@ export default function Movielist() {
     currentPage * moviesPerPage
   );
 
-  const handleSearch = async (query) => {
-    // Make an API call to search for movies based on the query
-    const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=bdeba0f284b7d753826f7cb651d9cb90&language=en-US&query=${query}&page=1`
-    );
-    const data = await response.json();
-    setSearchResults(data.results);
-  };
+  
 
   return (
     <>
