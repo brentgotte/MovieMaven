@@ -10,7 +10,6 @@ export default function Movielist() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const moviesPerPage = 20;
-  const [searchResults, setSearchResults] = useState([]);
 
 
   useEffect(() => {
@@ -38,6 +37,8 @@ export default function Movielist() {
     (currentPage - 1) * moviesPerPage,
     currentPage * moviesPerPage
   );
+
+  
 
   return (
     <>
