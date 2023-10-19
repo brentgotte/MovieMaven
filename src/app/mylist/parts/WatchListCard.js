@@ -4,7 +4,7 @@ import Link from "next/link";
 export const WatchListCard = ({ movie }) => {
     return (
         <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500">
-        <Link href={`/movie.movies/${movie.movies.id}`} key={movie.movies.id}>
+        <Link href={`/mylist/${movie.movies.id}`} key={movie.movies.id}>
             
           <CardMedia
           
