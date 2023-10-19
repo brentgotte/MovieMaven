@@ -7,10 +7,12 @@ export default function Watchcall() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        supabase.from("movies").select("*")
+        supabase.from("watchlist").select(`*, movies(*)`)
+        .eq('has_watched', false)
           .then((res) => {
             const data = res.data.slice(0, 20);
             setMovies(data);
+            console.log(data);
             setLoading(false);
           });
       }, []);
