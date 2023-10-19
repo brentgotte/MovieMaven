@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 
 export default function MovieCard({movie}) {
-  console.log(movie);
   return (
     <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500">
       <Link href={`/movie/${movie.id}`} key={movie.id}>

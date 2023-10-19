@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import supabase from "@/api/supabaseClient";
 import Image from "next/image";
@@ -26,6 +26,8 @@ const style = {
 export default function Page() {
   const pathName = usePathname();
   const [movieData, setMovieData] = useState(null);
+  const [allGenres, setGenres] = useState(null);
+  // if (allGenres) console.log(allGenres);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -35,7 +37,11 @@ export default function Page() {
     const pathParts = pathName.split("/");
     const id = pathParts[2];
 
-    const getMovieData = async () => {
+    getMovieData(id);
+    getGenresForMovieId(id);
+  }, [pathName]);
+
+    const getMovieData = async (id) => {
       const { data, error } = await supabase
         .from("movies")
         .select("*")
@@ -48,31 +54,24 @@ export default function Page() {
       }
     };
 
-    getMovieData();
-  }, [pathName]);
-  // console.log(movieData);
+    const getGenresForMovieId = async (id) => {
+      supabase
+      .from("movies_genres")
+      .select(`
+        genres (
+          genre
+        )
+      `)
+      .eq("movie_id", id)
+      .then(({error, data}) => {
+        if (error) {
+          console.error("Error fetching genres:", error);
+        } else {
+          setGenres(data.map((item) => item.genres));
+        }
+      });
+    };
 
-  // const [allGenres, setAllGenres] = useState(null);
-
-  // useEffect(() => {
-  //   const pathParts = pathName.split("/");
-  //   const id = pathParts[2];
-
-  //   const getAllGenres = async () => {
-  //     const { data, error } = await supabase
-  //       .from("movies")
-  //       .select("genre_ids/0")
-  //       .eq("id", id);
-
-  //     if (error) {
-  //       console.error("Error fetching movie data:", error);
-  //     } else {
-  //       setAllGenres(data);
-  //     }
-  //   };
-  //   getAllGenres();
-  //   console.log(allGenres);
-  // });
   return (
     <>
       <div>
@@ -83,6 +82,8 @@ export default function Page() {
               src={`https://image.tmdb.org/t/p/w500${movieData?.[0]?.poster_path}`}
               width={400}
               height={750}
+              alt="movie poster"
+              priority
             />
           </div>
           <div className="inline-block w-1/3 bg-black bg-opacity-20 rounded-lg p-8">
@@ -107,6 +108,13 @@ export default function Page() {
                   {movieData?.[0]?.vote_average}
                 </p>
               </div>
+            </div>
+            <div className="pt-3">
+              <p className="text-gray-400 text-sm">
+                {allGenres?.map((item) => (
+                  <span key={item.genre} className="pr-2"> {item.genre} </span>
+                ))}
+              </p>
             </div>
             <div className="text-white pt-5">
               <p>{movieData?.[0]?.overview}</p>
