@@ -3,7 +3,6 @@ import { MdSkipPrevious, MdSkipNext } from 'react-icons/md';
 import Link from 'next/link';
 
 export default function Moviecarousel({ movies }) {
-  console.log(movies);
   const [activeChunk, setActiveChunk] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const chunkSize = 4;

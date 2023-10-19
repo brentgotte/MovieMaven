@@ -15,7 +15,6 @@ export default function Movielist() {
   useEffect(() => {
     supabase.from('movies').select('*').then((res) => {
       const data = res.data.slice(0, 20);
-      console.log(data);
       setMovies(data);
       setLoading(false);
     });
