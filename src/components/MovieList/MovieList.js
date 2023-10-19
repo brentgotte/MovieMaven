@@ -18,6 +18,7 @@ export default function Movielist() {
       setMovies(data);
       setLoading(false);
     });
+
   }, []);
 
   const handlePageChange = (direction) => {
