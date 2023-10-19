@@ -4,11 +4,12 @@ import './globals.css';
 import Carouselcall from '@/components/Carouselcall/Carouselcall';
 import Watchcall from '@/components/Watchlist/Watchcall';
 import Footer from '@/components/Footer/Footer';
+import Cookie from 'js-cookie';
 
 export default function Home() {
 
-    const isLoggedIn = document.cookie.indexOf('email') !== -1;
-    console.log(isLoggedIn);
+    const isLoggedIn = Cookie.get('email') !== undefined;
+    
 
 
     
