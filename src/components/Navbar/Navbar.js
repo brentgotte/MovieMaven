@@ -4,6 +4,7 @@ import Link from "next/link";
 import Cookie from "js-cookie";
 import LogIn from "@/components/LogIn/LogIn";
 import SearchBar from "../SearchBar/searchBar";
+import { MdAccountCircle } from "react-icons/md";
 
 export default function Navbar() {
   const [email, setEmail] = useState(null);
@@ -59,7 +60,7 @@ export default function Navbar() {
 
         <SearchBar onSearch={handleSearch} searchResults={searchResults} />
 
-        { email === null ? (
+        {email === null ? (
           <LogIn />
         ) : (
           <div className="flex items-center">
@@ -75,9 +76,8 @@ export default function Navbar() {
               <MdAccountCircle size={75} />
             )}
           </div>
-
         )}
       </div>
-    </div>
+    </>
   );
 }
