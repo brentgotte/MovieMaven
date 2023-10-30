@@ -1,3 +1,5 @@
+
+
 import { useState, useEffect } from "react";
 import supabase from "@/api/supabaseClient";
 
@@ -5,11 +7,12 @@ const ClaimButton = ({ movieId, session }) => {
   const [claimed, setClaimed] = useState(false);
   const [user, setUser] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-
+  
   useEffect(() => {
     supabase.auth.getUser().then((res) => {
       setUser(res.data.user);
     });
+    
     const checkExistingClaim = async () => {
       try {
         const { data: existingClaim, error } = await supabase
@@ -37,6 +40,7 @@ const ClaimButton = ({ movieId, session }) => {
   const claimMovie = async (has_watched) => {
     try {
       if (!claimed) {
+        
         await supabase.from("watchlist").insert([
           {
             movie_id: movieId,
