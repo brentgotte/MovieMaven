@@ -12,7 +12,6 @@ export default function Watchcall() {
           .then((res) => {
             const data = res.data.slice(0, 20);
             setMovies(data);
-            console.log(data);
             setLoading(false);
           });
       }, []);

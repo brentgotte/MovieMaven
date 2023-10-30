@@ -28,7 +28,7 @@ export default function watchlist({ movies }) {
     }
   };
 
-  const displayedMovies = movies.slice(activeChunk * chunkSize, (activeChunk + 1) * chunkSize);
+  const displayedMovies = Array.isArray(movies) ? movies.slice(activeChunk * chunkSize, (activeChunk + 1) * chunkSize) : [];
 
   return (
     <>

@@ -1,15 +1,18 @@
-// components/ClaimButton.js
+
+
 import { useState, useEffect } from "react";
 import supabase from "@/api/supabaseClient";
+
 const ClaimButton = ({ movieId, session }) => {
   const [claimed, setClaimed] = useState(false);
   const [user, setUser] = useState(null);
-
+  const [successMessage, setSuccessMessage] = useState(null);
+  
   useEffect(() => {
     supabase.auth.getUser().then((res) => {
       setUser(res.data.user);
     });
-    console.log("user: ", user);
+    
     const checkExistingClaim = async () => {
       try {
         const { data: existingClaim, error } = await supabase
@@ -25,8 +28,6 @@ const ClaimButton = ({ movieId, session }) => {
 
         if (existingClaim && existingClaim.length > 0) {
           setClaimed(true);
-          console.log("claimed Movie: ", existingClaim[0].movie_id);
-          console.log("user:", existingClaim[0].user_id);
         }
       } catch (error) {
         console.error("Error checking existing claim:", error.message);
@@ -39,7 +40,7 @@ const ClaimButton = ({ movieId, session }) => {
   const claimMovie = async (has_watched) => {
     try {
       if (!claimed) {
-        console.log("Claiming movie...", movieId, user.id);
+        
         await supabase.from("watchlist").insert([
           {
             movie_id: movieId,
@@ -48,8 +49,9 @@ const ClaimButton = ({ movieId, session }) => {
           },
         ]);
         setClaimed(true);
+        setSuccessMessage("Added successfully!");
       } else {
-        console.log("Movie is already claimed by the user.");
+        setSuccessMessage("Movie is already claimed by the user.");
       }
     } catch (error) {
       console.error("Error claiming movie:", error.message);
@@ -57,27 +59,38 @@ const ClaimButton = ({ movieId, session }) => {
   };
 
   return (
-    <>
-      <div>
-        <button
-          onClick={() => {
-            claimMovie(false);
-          }}
-          className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-        >
-          <p>Click here to add to Watchlist!</p>
-        </button>
+    <div className="claim-button-container">
+      <button
+        onClick={() => {
+          claimMovie(false);
+        }}
+        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+      >
+        <p>Click here to add to Watchlist!</p>
+      </button>
+      <button
+        onClick={() => {
+          claimMovie(true);
+        }}
+        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+      >
+        <p>Click here to add to Watched!</p>
+      </button>
 
-        <button
-          onClick={() => {
-            claimMovie(true);
-          }}
-          className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-        >
-          <p>Click here to add to Watched!</p>
-        </button>
-      </div>
-    </>
+      {successMessage && <p className="success-message">{successMessage}</p>}
+
+      <style jsx>{`
+        .claim-button-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .success-message {
+          margin-top: 10px;
+        }
+      `}</style>
+    </div>
   );
 };
 

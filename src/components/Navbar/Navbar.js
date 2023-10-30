@@ -7,7 +7,9 @@ import SearchBar from "../SearchBar/searchBar";
 
 export default function Navbar() {
   const [email, setEmail] = useState(null);
+
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     setEmail(Cookie.get("email"));
@@ -60,9 +62,22 @@ export default function Navbar() {
         { email === null ? (
           <LogIn />
         ) : (
-          <h1 className=" text-2xl text-white"> Welcome, {email}</h1>
+          <div className="flex items-center">
+            {selectedImage ? (
+              <img
+                src={selectedImage}
+                alt="User Avatar"
+                className="rounded-full border-2 border-white"
+                width={75}
+                height={75}
+              />
+            ) : (
+              <MdAccountCircle size={75} />
+            )}
+          </div>
+
         )}
       </div>
-    </>
+    </div>
   );
 }
