@@ -1,14 +1,17 @@
-"use client"
-import React, { useState } from 'react';
-import Link from 'next/link';
-import Cookie from 'js-cookie';
-import LogIn from '@/components/LogIn/LogIn';
-import SearchBar from '../SearchBar/searchBar';
+"use client";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Cookie from "js-cookie";
+import LogIn from "@/components/LogIn/LogIn";
+import SearchBar from "../SearchBar/searchBar";
 
 export default function Navbar() {
-  const Email = Cookie.get('email');
-  const isEmailCookieSet = !!Cookie.get('email');
+  const [email, setEmail] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    setEmail(Cookie.get("email"));
+  }, []);
 
   const handleSearch = async (query) => {
     const response = await fetch(
@@ -20,9 +23,9 @@ export default function Navbar() {
 
   return (
     <>
-      <div className={`flex justify-between items-center p-4 `}>
-        <div className='rounded-md'>
-          <img src='/Logo.png' alt='logo' id='logo' />
+      <div className="flex justify-between items-center p-4">
+        <div className="rounded-md">
+          <img src="/Logo.png" alt="logo" id="logo" />
         </div>
 
         <ul className="flex space-x-4">
@@ -38,20 +41,27 @@ export default function Navbar() {
           </li>
           <li>
             <Link href="#community">
-              <p className="text-white hover:text-blue-400 underline">Community</p>
+              <p className="text-white hover:text-blue-400 underline">
+                Community
+              </p>
             </Link>
           </li>
           <li>
             <Link href="#profile">
-              <p className="text-white hover:text-blue-400 underline">Profile</p>
+              <p className="text-white hover:text-blue-400 underline">
+                Profile
+              </p>
             </Link>
           </li>
         </ul>
 
-          <SearchBar onSearch={handleSearch} searchResults={searchResults} />
+        <SearchBar onSearch={handleSearch} searchResults={searchResults} />
 
-          {!isEmailCookieSet ? <LogIn /> : <h1 className=' text-2xl text-white'> Welcome, {Email}</h1>}
-
+        { email === null ? (
+          <LogIn />
+        ) : (
+          <h1 className=" text-2xl text-white"> Welcome, {email}</h1>
+        )}
       </div>
     </>
   );
