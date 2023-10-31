@@ -7,8 +7,8 @@ import Footer from "@/components/Footer/Footer";
 
 
 export default function Home() {
-  const isLoggedIn = document.cookie.indexOf("email") !== -1;
-  console.log(isLoggedIn);
+    const isLoggedIn = Cookie.get('email') !== undefined;
+
 
   return (
     <>
