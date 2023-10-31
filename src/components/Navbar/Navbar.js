@@ -38,19 +38,12 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="#movies">
+            <Link href="/movies">
               <p className="text-white hover:text-blue-400 underline">Movies</p>
             </Link>
           </li>
           <li>
-            <Link href="#community">
-              <p className="text-white hover:text-blue-400 underline">
-                Community
-              </p>
-            </Link>
-          </li>
-          <li>
-            <Link href="#profile">
+            <Link href="/profile">
               <p className="text-white hover:text-blue-400 underline">
                 Profile
               </p>
