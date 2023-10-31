@@ -16,6 +16,12 @@ export default function Profilepage() {
     }
   };
 
+  const Logout = () => {
+    Cookie.remove('email');
+    Cookie.remove('username');
+    window.location.reload();
+  }
+
   const Email = Cookie.get('email');
   const Username = Cookie.get('username');
 
@@ -77,7 +83,7 @@ export default function Profilepage() {
             <ImArrowRight className="inline-block align-middle " />
           </div>
           <div className="pt-10 border-t-2 flex justify-center flex-col">
-            <button className="ml-14 w-32 bg-red-600 text-gray-900 hover:text-white border hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800 border-b-4 border-red-900">Log out</button>
+            <button onClick={Logout} className="ml-14 w-32 bg-red-600 text-gray-900 hover:text-white border hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800 border-b-4 border-red-900">Log out</button>
             <button className="ml-14 w-32 bg-white text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Switch user</button>
           </div>
         </div>
