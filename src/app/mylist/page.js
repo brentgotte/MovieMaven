@@ -3,6 +3,7 @@ import Cookie from "js-cookie";
 import WatchListCard from "./parts/WatchListCard";
 import supabase from "../../api/supabaseClient";
 import { useState, useEffect } from "react";
+import { CircularProgress } from '@mui/material';
 
 export default function mylist() {
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,11 @@ export default function mylist() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center pt-72">
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (

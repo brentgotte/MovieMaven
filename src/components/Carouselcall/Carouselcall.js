@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Moviecarousel from '../MovieCarousel/Moviecarousel';
 import supabase from '@/api/supabaseClient';
+import { CircularProgress } from '@mui/material';
 
 export default function Carouselcall() {
     const [movies, setMovies] = useState([]);
@@ -29,8 +30,12 @@ export default function Carouselcall() {
     const movieChunks = chunkArray(movies, 20); // Change 2 to the number of movies you want per carousel
 
     if (loading) {
-        return <div>Loading...</div>;
-    }  
+        return (
+          <div className="flex justify-center pt-72">
+            <CircularProgress />
+          </div>
+        );
+      }
     
     return (
         <div className="flex  justify-center">

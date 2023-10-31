@@ -31,32 +31,36 @@ export default function Navbar() {
           <img src="/Logo.png" alt="logo" id="logo" />
         </div>
 
-        <ul className="flex space-x-4">
-          <li>
-            <Link href="/">
-              <p className="text-white hover:text-blue-400 underline">Home</p>
-            </Link>
-          </li>
-          <li>
-            <Link href="#movies">
-              <p className="text-white hover:text-blue-400 underline">Movies</p>
-            </Link>
-          </li>
-          <li>
-            <Link href="#community">
-              <p className="text-white hover:text-blue-400 underline">
-                Community
-              </p>
-            </Link>
-          </li>
-          <li>
-            <Link href="#profile">
-              <p className="text-white hover:text-blue-400 underline">
-                Profile
-              </p>
-            </Link>
-          </li>
-        </ul>
+        <div className="md:bg-blue-500">
+          <ul className="flex space-x-4">
+            <li>
+              <Link href="/">
+                <p className="text-white hover:text-blue-400 underline">Home</p>
+              </Link>
+            </li>
+            <li>
+              <Link href="#movies">
+                <p className="text-white hover:text-blue-400 underline">
+                  Movies
+                </p>
+              </Link>
+            </li>
+            <li>
+              <Link href="#community">
+                <p className="text-white hover:text-blue-400 underline">
+                  Community
+                </p>
+              </Link>
+            </li>
+            <li>
+              <Link href="#profile">
+                <p className="text-white hover:text-blue-400 underline">
+                  Profile
+                </p>
+              </Link>
+            </li>
+          </ul>
+        </div>
 
         <SearchBar onSearch={handleSearch} searchResults={searchResults} />
 
