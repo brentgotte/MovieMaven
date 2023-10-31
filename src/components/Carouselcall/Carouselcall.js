@@ -33,7 +33,7 @@ export default function Carouselcall() {
     }  
     
     return (
-        <div className="flex  justify-center ">
+        <div className=" hidden  justify-center laptop:block">
             
             {movieChunks.map((chunk, idx) => (
                 <Moviecarousel key={idx} movies={chunk} />
