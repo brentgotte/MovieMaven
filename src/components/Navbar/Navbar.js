@@ -1,5 +1,5 @@
-"use client";
-import React, { useState, useEffect } from "react";
+"use client"; 
+import React, { useState } from "react";
 import Link from "next/link";
 import Cookie from "js-cookie";
 import LogIn from "@/components/LogIn/LogIn";
@@ -30,7 +30,7 @@ export default function Navbar() {
         </div>
 
         <ul className="flex space-x-4">
-          <li>
+         <li>
             <Link href="/">
               <p className="text-white hover:text-blue-400 underline">Home</p>
             </Link>
@@ -62,7 +62,9 @@ export default function Navbar() {
         height={75}
       />
     ) : (
-      <MdAccountCircle size={75} />
+      <div>
+        <MdAccountCircle size={75} />
+      </div>
     )}
   </div>
 ) : (

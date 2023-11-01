@@ -92,14 +92,6 @@ export default function Profilepage() {
             <h1 className="ml-6 text-white font-mono">My watchlist</h1>
             <Watchcall />
           </div>
-          <div className="flex flex-row basis-2/5 ml-8 h-1/5">
-            <div className="flex flex-col basis-1/2">
-              <h1 className="text-white font-mono">Recently added</h1>
-            </div>
-            <div className="flex flex-col basis-1/2">
-              <h1 className="text-white font-mono">Recently watched</h1>
-            </div>
-          </div>
         </div>
       </div>
     </>

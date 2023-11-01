@@ -20,6 +20,7 @@ const SearchBar = ({ onSearch, searchResults }) => {
   };
 
   return (
+    <>
     <div className="relative z-10">
       <input
         type="text"
@@ -53,6 +54,7 @@ const SearchBar = ({ onSearch, searchResults }) => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
