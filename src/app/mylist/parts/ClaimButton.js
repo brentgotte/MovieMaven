@@ -1,7 +1,8 @@
 
-
+import handleClose from "../../movie/[id]/page";
 import { useState, useEffect } from "react";
 import supabase from "@/api/supabaseClient";
+import page from "../movie/[id]/page";
 
 const ClaimButton = ({ movieId, session }) => {
   const [claimed, setClaimed] = useState(false);
@@ -12,6 +13,8 @@ const ClaimButton = ({ movieId, session }) => {
     supabase.auth.getUser().then((res) => {
       setUser(res.data.user);
     });
+
+
     
     const checkExistingClaim = async () => {
       try {
@@ -56,6 +59,8 @@ const ClaimButton = ({ movieId, session }) => {
     } catch (error) {
       console.error("Error claiming movie:", error.message);
     }
+
+
   };
 
   return (
@@ -63,18 +68,20 @@ const ClaimButton = ({ movieId, session }) => {
       <button
         onClick={() => {
           claimMovie(false);
+          
         }}
         className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-      >
-        <p>Click here to add to Watchlist!</p>
+        >
+        I Want To Watch This!
       </button>
       <button
-        onClick={() => {
-          claimMovie(true);
+        onClick={async () => {
+          await claimMovie(false);
+         
         }}
         className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
       >
-        <p>Click here to add to Watched!</p>
+        I Have Watched This!
       </button>
 
       {successMessage && <p className="success-message">{successMessage}</p>}

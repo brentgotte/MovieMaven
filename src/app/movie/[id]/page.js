@@ -140,7 +140,7 @@ export default function Page() {
               </Typography>
             </div>
             <div className="flex justify-center mt-12">
-                <ClaimButton movieId={movieData?.[0]?.id}/>
+                <ClaimButton  movieId={movieData?.[0]?.id}/>
             </div>
 
             <div

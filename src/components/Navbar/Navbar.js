@@ -26,7 +26,9 @@ export default function Navbar() {
     <>
       <div className="flex justify-between items-center p-4">
         <div className="rounded-md">
+          <Link href={"/"}>
           <img src="/Logo.png" alt="logo" id="logo" />
+          </Link>
         </div>
 
         <ul className="flex space-x-4">
