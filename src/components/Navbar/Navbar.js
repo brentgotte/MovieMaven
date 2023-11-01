@@ -5,13 +5,14 @@ import Cookie from 'js-cookie';
 import LogIn from '@/components/LogIn/LogIn';
 import SearchBar from '../SearchBar/searchBar';
 import { MdAccountCircle } from "react-icons/md";
+import { useProfilePicture } from '../profilePictureContext/profilePictureContext';
+
 
 export default function Navbar() {
   const email = Cookie.get('email');
-  const profilePicture = Cookie.get('profilePicture');
   const isEmailCookieSet = !!email;
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const { profilePictureUrl } = useProfilePicture(); 
 
   const handleSearch = async (query) => {
     const response = await fetch(
@@ -26,7 +27,6 @@ export default function Navbar() {
       <div className='rounded-md'>
         <img src='/Logo.png' alt='logo' id='logo' />
       </div>
-
       <ul className="flex space-x-4">
         <li>
           <Link href="/">
@@ -52,20 +52,14 @@ export default function Navbar() {
 
       <SearchBar onSearch={handleSearch} searchResults={searchResults} />
       <div>
-        {isEmailCookieSet ? (
-          <div className="flex items-center">
-            {selectedImage ? (
-              <img
-                src={selectedImage}
-                alt="User Avatar"
-                className="rounded-full border-2 border-white"
-                width={75}
-                height={75}
-              />
-            ) : (
-              <MdAccountCircle size={75} />
-            )}
-          </div>
+        {profilePictureUrl ? (
+          <img
+            src={profilePictureUrl}
+            alt="User Avatar"
+            className="rounded-full border-2 border-white"
+            width={40}
+            height={40}
+          />
         ) : (
           <LogIn />
         )}
@@ -73,4 +67,5 @@ export default function Navbar() {
     </div>
   );
 }
+
  
