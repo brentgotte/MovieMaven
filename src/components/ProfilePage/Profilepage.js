@@ -23,9 +23,6 @@ export default function Profilepage() {
 
   const Email = Cookie.get('email');
   const Username = Cookie.get('username');
-
-
-  console.log("Email:", Email);
   return (
 
     <>
