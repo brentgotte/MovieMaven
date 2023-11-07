@@ -8,6 +8,8 @@ import { BsBookmarkStar } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import { Modal, Box, Typography, TextField } from "@mui/material";
 import ClaimButton from "@/app/mylist/parts/ClaimButton";
+import { AiFillEye } from "react-icons/ai";
+import { AiFillEyeInvisible } from "react-icons/ai";
 
 const style = {
   position: "absolute",
@@ -23,11 +25,14 @@ const style = {
   p: 4,
 };
 
+const watched = false;
+
 export default function Page() {
   const pathName = usePathname();
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
   // if (allGenres) console.log(allGenres);
+  
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -72,6 +77,7 @@ export default function Page() {
       });
     };
 
+    
   return (
     <>
       <div>
@@ -89,6 +95,7 @@ export default function Page() {
           <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3 ">
             <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
               <div>
+              
                 <h1>{movieData?.[0]?.title}</h1>
               </div>
               <div className="hover:cursor-pointer">
@@ -108,6 +115,14 @@ export default function Page() {
                   {movieData?.[0]?.vote_average}
                 </p>
               </div>
+              <div className="px-3">
+                <p>|</p>
+              </div>
+              <div>
+                <p>
+                { watched ? <AiFillEye  size={20}/> : <AiFillEyeInvisible />}
+                </p>
+              </div>
             </div>
             <div className="pt-3">
               <p className="text-gray-400 text-sm">
@@ -118,6 +133,7 @@ export default function Page() {
             </div>
             <div className="text-white pt-5">
               <p>{movieData?.[0]?.overview}</p>
+              
             </div>
           </div>
         </div>
@@ -140,7 +156,7 @@ export default function Page() {
               </Typography>
             </div>
             <div className="flex justify-center mt-12">
-                <ClaimButton  movieId={movieData?.[0]?.id}/>
+            <ClaimButton movieId={movieData?.[0]?.id}  />
             </div>
 
             <div
