@@ -1,31 +1,51 @@
-// profilePicture.js
 import React, { useState } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
-import { useProfilePicture } from '../ProfilePictureContext';
 
-export default function ProfilePicture() {
-  const { profilePictureUrl, setProfilePictureUrl } = useProfilePicture();
+export default function ProfilePicture({ profilePictureUrl, onImageChange }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfilePictureUrl(imageUrl);
+  const handleSaveImage = () => {
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        onImageChange(dataUrl);
+        setIsEditing(false);
+      };
+      reader.readAsDataURL(selectedImage);
     }
   };
 
   return (
     <>
-      {profilePictureUrl ? (
-        <img
-          src={profilePictureUrl}
-          alt="User Avatar"
-          className="rounded-full border-2 border-white"
-          width={100}
-          height={125}
-        />
+      {isEditing ? (
+        <div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleSaveImage} // Use handleSaveImage instead
+            style={{ display: 'none' }}
+            ref={(input) => input && input.click()}
+          />
+          <button className='pr-4' onClick={handleSaveImage}>Save</button>
+          <button onClick={() => setIsEditing(false)}>Cancel</button>
+        </div>
       ) : (
-        <MdAccountCircle size={100} />
+        <>
+          {profilePictureUrl ? (
+            <img
+              src={profilePictureUrl}
+              alt="User Avatar"
+              className="rounded-full border-2 border-white"
+              width={75}
+              height={75}
+            />
+          ) : (
+            <MdAccountCircle size={100} />
+          )}
+          <button onClick={() => setIsEditing(true)}>Change Picture</button>
+        </>
       )}
     </>
   );

@@ -50,6 +50,7 @@ const SearchBar = ({ onSearch, searchResults }) => {
               </li>
             ))}
           </ul>
+          {/* < */}
         </div>
       )}
     </div>
