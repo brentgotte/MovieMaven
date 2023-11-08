@@ -5,6 +5,7 @@ import { ImArrowRight } from "react-icons/im";
 import Watchlist from '../Watchlist/Watchlist';
 import Cookie from 'js-cookie';
 import Watchcall from '../Watchlist/Watchcall';
+import LogoutButton from './parts/LogoutButton';
 
 export default function Profilepage() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -16,11 +17,12 @@ export default function Profilepage() {
     }
   };
 
+  const isLoggedIn = Cookie.get('email') !== undefined;
+
+  
+
   const Email = Cookie.get('email');
   const Username = Cookie.get('username');
-
-
-  console.log("Email:", Email);
   return (
 
     <>
@@ -77,7 +79,7 @@ export default function Profilepage() {
             <ImArrowRight className="inline-block align-middle " />
           </div>
           <div className="pt-10 border-t-2 flex justify-center flex-col">
-            <button className="ml-14 w-32 bg-red-600 text-gray-900 hover:text-white border hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800 border-b-4 border-red-900">Log out</button>
+           {isLoggedIn ? ( <LogoutButton /> ) : ( null )}
             <button className="ml-14 w-32 bg-white text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Switch user</button>
           </div>
         </div>
@@ -85,14 +87,6 @@ export default function Profilepage() {
           <div className="basis-2/5">
             <h1 className="ml-6 text-white font-mono">My watchlist</h1>
             <Watchcall />
-          </div>
-          <div className="flex flex-row basis-2/5 ml-8 h-1/5">
-            <div className="flex flex-col basis-1/2">
-              <h1 className="text-white font-mono">Recently added</h1>
-            </div>
-            <div className="flex flex-col basis-1/2">
-              <h1 className="text-white font-mono">Recently watched</h1>
-            </div>
           </div>
         </div>
       </div>

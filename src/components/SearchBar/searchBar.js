@@ -1,16 +1,43 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
+'use client'
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import supabase from "../../api/supabaseClient";
 
-const SearchBar = ({ onSearch, searchResults }) => {
-  const [query, setQuery] = useState('');
+const SearchBar = () => {
+  const [query, setQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [totalResults, setTotalResults] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const results = Array.isArray(searchResults) ? searchResults : [];
+  useEffect(() => {
+    const fetchResults = async () => {
+      setLoading(true);
+      // Fetch the count of all movies that match the query
+      const { data, count, error } = await supabase
+        .from('movies')
+        .select('*', { count: 'exact' })
+        .ilike('title', `%${query}%`);
+
+      if (error) {
+        console.error('error', error);
+      } else {
+        setSearchResults(data.slice(0, 3)); // Show only the first three results
+        setTotalResults(count || 0); // Set the total count of matching results
+      }
+      setLoading(false);
+    };
+
+    if (query.length > 0) {
+      fetchResults();
+    } else {
+      setSearchResults([]);
+      setTotalResults(0);
+    }
+  }, [query]);
 
   const handleInputChange = (e) => {
-    const newQuery = e.target.value;
-    setQuery(newQuery);
-    onSearch(newQuery);
+    setQuery(e.target.value);
     setShowResults(true);
   };
   
@@ -28,7 +55,7 @@ const SearchBar = ({ onSearch, searchResults }) => {
         onChange={handleInputChange}
         className="bg-white border rounded-md px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
       />
-      {showResults && results.length > 0 && (
+      {showResults && (
         <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-20">
           <ul style={{ maxHeight: '200px', overflowY: 'auto' }}>
             {results.map((movie) => (
@@ -38,20 +65,26 @@ const SearchBar = ({ onSearch, searchResults }) => {
                 onClick={handleMovieClick}
               >
                 <Link href={`/movie/${movie.id}`}>
-                  <span className="cursor-pointer">
+                  <p className="cursor-pointer flex items-center">
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                       alt={movie.title}
                       className="w-10 h-10 mr-2"
                     />
                     {movie.title}
-                  </span>
+                  </p>
                 </Link>
               </li>
             ))}
           </ul>
+          {totalResults > 3 && (
+            <div className="px-4 py-2 text-sm text-gray-700">
+              Showing 3 of {totalResults} results
+            </div>
+          )}
         </div>
       )}
+      {loading && <div className="absolute mt-1 w-full">Loading...</div>}
     </div>
   );
 };
