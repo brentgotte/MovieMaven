@@ -18,7 +18,6 @@ export default function page() {
 
     getMovieData(id);
     getGenresForMovieId(id);
-    setLoading(false);
   }, [pathName]);
 
   const getMovieData = async (id) => {
@@ -51,6 +50,7 @@ export default function page() {
         } else {
           setGenres(data.map((item) => item.genres));
         }
+        setLoading(false);
       });
   };
   if (loading) {

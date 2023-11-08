@@ -31,7 +31,7 @@ export default function Navbar() {
           <img src="/Logo.png" alt="logo" id="logo" />
         </div>
 
-        <div className="md:bg-blue-500">
+        <div>
           <ul className="flex space-x-4">
             <li>
               <Link href="/">

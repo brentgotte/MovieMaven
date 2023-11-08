@@ -6,8 +6,10 @@ import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
 import { BsBookmarkStar } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { Modal, Box, Typography, TextField } from "@mui/material";
+import { Modal, Box, Typography } from "@mui/material";
 import ClaimButton from "@/app/mylist/parts/ClaimButton";
+import { BsCheck2Circle } from "react-icons/bs";
+import { CircularProgress } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -27,11 +29,24 @@ export default function Page() {
   const pathName = usePathname();
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
+  const [loading, setLoading] = useState(true);
   // if (allGenres) console.log(allGenres);
-
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const alertDiv = document.getElementById("alert");
+  const alertMessage = () => {
+    let count = 0;
+    setOpen(false);
+    count++;
+    if (count > 0) {
+      alertDiv.classList.remove("hidden");
+    }
+  };
+  const closeAlert = () => {
+    alertDiv.classList.add("hidden");
+  };
 
   useEffect(() => {
     const pathParts = pathName.split("/");
@@ -41,40 +56,63 @@ export default function Page() {
     getGenresForMovieId(id);
   }, [pathName]);
 
-    const getMovieData = async (id) => {
-      const { data, error } = await supabase
-        .from("movies")
-        .select("*")
-        .eq("id", id);
+  const getMovieData = async (id) => {
+    const { data, error } = await supabase
+      .from("movies")
+      .select("*")
+      .eq("id", id);
 
-      if (error) {
-        console.error("Error fetching movie data:", error);
-      } else {
-        setMovieData(data);
-      }
-    };
+    if (error) {
+      console.error("Error fetching movie data:", error);
+    } else {
+      setMovieData(data);
+    }
+  };
 
-    const getGenresForMovieId = async (id) => {
-      supabase
+  const getGenresForMovieId = async (id) => {
+    supabase
       .from("movies_genres")
-      .select(`
+      .select(
+        `
         genres (
           genre
-        )
-      `)
+          )
+          `
+      )
       .eq("movie_id", id)
-      .then(({error, data}) => {
+      .then(({ error, data }) => {
         if (error) {
           console.error("Error fetching genres:", error);
         } else {
           setGenres(data.map((item) => item.genres));
         }
+        setLoading(false);
       });
-    };
-
+  };
+  if (loading) {
+    return (
+      <div className="flex justify-center pt-72">
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <>
       <div>
+        <div id="alert" className="-translate-x-1/2 left-1/2 absolute hidden">
+          <div className="bg-green-100 rounded-lg p-4 text-black flex items-center">
+            <div className="flex ">
+              <BsCheck2Circle className="text-green-400 h-6 w-6" />
+            </div>
+            <div className="text-sm px-2">
+              <span className="font-semibold">Success!</span> Movie added to
+              watchlist.
+            </div>
+            <div className="hover:cursor-pointer">
+              <AiOutlineClose onClick={closeAlert} />
+            </div>
+          </div>
+        </div>
         <div className="flex justify-evenly items-center pt-8 px-10">
           <div className="bg-black p-3 rounded-lg">
             <Image
@@ -112,7 +150,10 @@ export default function Page() {
             <div className="pt-3">
               <p className="text-gray-400 text-sm">
                 {allGenres?.map((item) => (
-                  <span key={item.genre} className="pr-2"> {item.genre} </span>
+                  <span key={item.genre} className="pr-2">
+                    {" "}
+                    {item.genre}{" "}
+                  </span>
                 ))}
               </p>
             </div>
@@ -139,8 +180,11 @@ export default function Page() {
                 Add to watchlist!
               </Typography>
             </div>
-            <div className="flex justify-center mt-12">
-                <ClaimButton movieId={movieData?.[0]?.id}/>
+            <div className="flex justify-center mt-12" onClick={alertMessage}>
+              <div></div>
+              <div>
+                <ClaimButton movieId={movieData?.[0]?.id} />
+              </div>
             </div>
 
             <div
