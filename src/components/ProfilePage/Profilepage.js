@@ -15,7 +15,7 @@ export default function Profilepage() {
     // Save the profile picture URL to cookies
     Cookies.set('profilePictureUrl', dataUrl, { expires: 365 }); // Cookie expires in 365 days
   };
-  
+
   const Email = Cookie.get('email');
   const Username = Cookie.get('username');
 
@@ -27,7 +27,8 @@ export default function Profilepage() {
         <div className="w-72 3/4 flex flex-col justify-center basis-1/6 border-r-4">
           <div className="border-b-4 border-white">
             <div className="flex justify-center">
-            <ProfilePicture profilePictureUrl={profilePictureUrl} onImageChange={handleImageChange} />
+              <ProfilePicture profilePictureUrl={profilePictureUrl} onImageChange={handleImageChange} />
+              <button onClick={() => setIsEditing(true)}>Change Picture</button>
             </div>
           </div>
           <div className="flex flex-col justify-items-start border-b-2 border-white pl-2">
