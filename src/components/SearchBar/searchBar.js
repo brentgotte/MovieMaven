@@ -5,7 +5,7 @@ const SearchBar = ({ onSearch, searchResults }) => {
   const [query, setQuery] = useState('');
   const [showResults, setShowResults] = useState(false);
 
-  const results = Array.isArray(searchResults) ? searchResults.slice(0, 3) : [];
+  const results = Array.isArray(searchResults) ? searchResults : [];
 
   const handleInputChange = (e) => {
     const newQuery = e.target.value;
@@ -13,10 +13,10 @@ const SearchBar = ({ onSearch, searchResults }) => {
     onSearch(newQuery);
     setShowResults(true);
   };
-
+  
   const handleMovieClick = () => {
-    setQuery(''); 
-    setShowResults(false); 
+    setQuery('');
+    setShowResults(false);
   };
 
   return (
@@ -30,12 +30,12 @@ const SearchBar = ({ onSearch, searchResults }) => {
       />
       {showResults && results.length > 0 && (
         <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-20">
-          <ul>
+          <ul style={{ maxHeight: '200px', overflowY: 'auto' }}>
             {results.map((movie) => (
               <li
                 key={movie.id}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
-                onClick={handleMovieClick} 
+                onClick={handleMovieClick}
               >
                 <Link href={`/movie/${movie.id}`}>
                   <span className="cursor-pointer">
@@ -57,4 +57,3 @@ const SearchBar = ({ onSearch, searchResults }) => {
 };
 
 export default SearchBar;
-
