@@ -28,7 +28,7 @@ export default function watchlist({ movies }) {
     }
   };
 
-  const displayedMovies = movies.slice(activeChunk * chunkSize, (activeChunk + 1) * chunkSize);
+  const displayedMovies = Array.isArray(movies) ? movies.slice(activeChunk * chunkSize, (activeChunk + 1) * chunkSize) : [];
 
   return (
     <>
@@ -44,11 +44,11 @@ export default function watchlist({ movies }) {
           </div>
         ))}
         
-        <button type="button" className="absolute top-1/2 left-40 z-30 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2" onClick={handlePrev}>
+        <button type="button" className="absolute top-1/2 left-80 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2" onClick={handlePrev}>
           <MdSkipPrevious/>
         </button>
 
-        <button type="button" className="absolute top-1/2 right-40 z-30 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2" onClick={handleNext}>
+        <button type="button" className="absolute top-1/2 right-80 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2" onClick={handleNext}>
           <MdSkipNext/>
         </button>
         <Link href='/mylist'>

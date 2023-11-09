@@ -10,7 +10,6 @@ export default function Carouselcall() {
         supabase.from("movies").select("*")
           .then((res) => {
             const data = res.data.slice(0, 20);
-            console.log(data);
             setMovies(data);
             setLoading(false);
           });
@@ -34,7 +33,7 @@ export default function Carouselcall() {
     }  
     
     return (
-        <div className="flex  justify-center">
+        <div className=" hidden  justify-center laptop:block">
             
             {movieChunks.map((chunk, idx) => (
                 <Moviecarousel key={idx} movies={chunk} />

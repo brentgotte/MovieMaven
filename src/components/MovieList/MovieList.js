@@ -1,4 +1,3 @@
-
 'use client'
 import { useState, useEffect } from "react";
 import MovieCard from "../MovieCard/MovieCard";
@@ -8,36 +7,23 @@ export default function Movielist() {
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const moviesPerPage = 20;
+ 
 
 
   useEffect(() => {
     supabase.from('movies').select('*').then((res) => {
       const data = res.data.slice(0, 20);
-      console.log(data);
       setMovies(data);
       setLoading(false);
     });
+
   }, []);
 
-  const handlePageChange = (direction) => {
-    if (direction === 'next' && currentPage < 5) {
-      setCurrentPage(currentPage + 1);
-    } else if (direction === 'prev' && currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  
 
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  const displayedMovies = movies.slice(
-    (currentPage - 1) * moviesPerPage,
-    currentPage * moviesPerPage
-  );
-
   
 
   return (
@@ -54,11 +40,7 @@ export default function Movielist() {
         ))}
 
       </div>
-      <div className="flex justify-center mt-6">
-        <button onClick={() => handlePageChange('prev')}>Previous</button>
-        <span className="mx-4">{currentPage}</span>
-        <button onClick={() => handlePageChange('next')}>Next</button>
-      </div>
+   
     </>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import supabase from "@/api/supabaseClient";
 import Image from "next/image";
@@ -26,6 +26,8 @@ const style = {
 export default function Page() {
   const pathName = usePathname();
   const [movieData, setMovieData] = useState(null);
+  const [allGenres, setGenres] = useState(null);
+  // if (allGenres) console.log(allGenres);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -35,7 +37,11 @@ export default function Page() {
     const pathParts = pathName.split("/");
     const id = pathParts[2];
 
-    const getMovieData = async () => {
+    getMovieData(id);
+    getGenresForMovieId(id);
+  }, [pathName]);
+
+    const getMovieData = async (id) => {
       const { data, error } = await supabase
         .from("movies")
         .select("*")
@@ -48,44 +54,39 @@ export default function Page() {
       }
     };
 
-    getMovieData();
-  }, [pathName]);
-  // console.log(movieData);
+    const getGenresForMovieId = async (id) => {
+      supabase
+      .from("movies_genres")
+      .select(`
+        genres (
+          genre
+        )
+      `)
+      .eq("movie_id", id)
+      .then(({error, data}) => {
+        if (error) {
+          console.error("Error fetching genres:", error);
+        } else {
+          setGenres(data.map((item) => item.genres));
+        }
+      });
+    };
 
-  // const [allGenres, setAllGenres] = useState(null);
-
-  // useEffect(() => {
-  //   const pathParts = pathName.split("/");
-  //   const id = pathParts[2];
-
-  //   const getAllGenres = async () => {
-  //     const { data, error } = await supabase
-  //       .from("movies")
-  //       .select("genre_ids/0")
-  //       .eq("id", id);
-
-  //     if (error) {
-  //       console.error("Error fetching movie data:", error);
-  //     } else {
-  //       setAllGenres(data);
-  //     }
-  //   };
-  //   getAllGenres();
-  //   console.log(allGenres);
-  // });
   return (
     <>
       <div>
-        <div className="flex justify-evenly items-center pt-8 px-10">
+        <div className="flex flex-col justify-evenly items-center pt-8 px-10 tablet:flex-row">
           <div className="bg-black p-3 rounded-lg">
             <Image
               className="rounded-lg"
               src={`https://image.tmdb.org/t/p/w500${movieData?.[0]?.poster_path}`}
               width={400}
               height={750}
+              alt="movie poster"
+              priority
             />
           </div>
-          <div className="inline-block w-1/3 bg-black bg-opacity-20 rounded-lg p-8">
+          <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3 ">
             <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
               <div>
                 <h1>{movieData?.[0]?.title}</h1>
@@ -107,6 +108,13 @@ export default function Page() {
                   {movieData?.[0]?.vote_average}
                 </p>
               </div>
+            </div>
+            <div className="pt-3">
+              <p className="text-gray-400 text-sm">
+                {allGenres?.map((item) => (
+                  <span key={item.genre} className="pr-2"> {item.genre} </span>
+                ))}
+              </p>
             </div>
             <div className="text-white pt-5">
               <p>{movieData?.[0]?.overview}</p>
@@ -132,7 +140,7 @@ export default function Page() {
               </Typography>
             </div>
             <div className="flex justify-center mt-12">
-                <ClaimButton movieId={movieData?.[0]?.id}/>
+                <ClaimButton  movieId={movieData?.[0]?.id}/>
             </div>
 
             <div
