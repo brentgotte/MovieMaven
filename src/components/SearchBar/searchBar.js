@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import supabase from '../../api/supabaseClient';
 
 const SearchBar = ({ onSearch, searchResults }) => {
   const [query, setQuery] = useState('');
   const [showResults, setShowResults] = useState(false);
+  const [matchingMoviesCount, setMatchingMoviesCount] = useState(0);
 
   const results = Array.isArray(searchResults) ? searchResults.slice(0, 3) : [];
+
+  useEffect(() => {
+    const fetchMatchingMoviesCount = async () => {
+      if (query.trim() === '') {
+        setMatchingMoviesCount(0);
+      } else {
+        const { data, error } = await supabase
+          .from('movies')
+          .select('count', { count: 'exact' })
+          .ilike('title', `%${query}%`);
+
+        if (!error) {
+          setMatchingMoviesCount(data[0].count);
+        }
+      }
+    };
+
+    fetchMatchingMoviesCount();
+  }, [query]);
 
   const handleInputChange = (e) => {
     const newQuery = e.target.value;
@@ -15,8 +36,13 @@ const SearchBar = ({ onSearch, searchResults }) => {
   };
 
   const handleMovieClick = () => {
-    setQuery(''); 
-    setShowResults(false); 
+    setQuery('');
+    setShowResults(false);
+  };
+
+  const handleMatchingMoviesClick = () => {
+    // Navigate to the search results page with the search query as a query parameter
+    router.push(`/search?query=${encodeURIComponent(query)}`);
   };
 
   return (
@@ -35,7 +61,7 @@ const SearchBar = ({ onSearch, searchResults }) => {
               <li
                 key={movie.id}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
-                onClick={handleMovieClick} 
+                onClick={handleMovieClick}
               >
                 <Link href={`/movie/${movie.id}`}>
                   <span className="cursor-pointer">
@@ -50,6 +76,12 @@ const SearchBar = ({ onSearch, searchResults }) => {
               </li>
             ))}
           </ul>
+          <p
+            onClick={handleMatchingMoviesClick} // Make the count clickable
+            className="cursor-pointer text-blue-600"
+          >
+            View movies: {matchingMoviesCount}
+          </p>
         </div>
       )}
     </div>
@@ -57,4 +89,3 @@ const SearchBar = ({ onSearch, searchResults }) => {
 };
 
 export default SearchBar;
-
