@@ -2,13 +2,17 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import supabase from "../../api/supabaseClient";
+// import { useRouter } from "next/router";
 
 const SearchBar = () => {
+  // const router = useRouter(); 
   const [query, setQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [matchingMoviesCount, setMatchingMoviesCount] = useState([]);
+;
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -22,8 +26,8 @@ const SearchBar = () => {
       if (error) {
         console.error('error', error);
       } else {
-        setSearchResults(data.slice(0, 3)); // Show only the first three results
-        setTotalResults(count || 0); // Set the total count of matching results
+        setSearchResults(data.slice(0, 3));
+        setTotalResults(count || 0);
       }
       setLoading(false);
     };
@@ -67,14 +71,14 @@ const SearchBar = () => {
 
   const handleMatchingMoviesClick = () => {
     // Navigate to the search results page with the search query as a query parameter
-    router.push(`/search?query=${encodeURIComponent(query)}`);
+    // router.push(`/search?query=${encodeURIComponent(query)}`);
   };
 
   return (
     <div className="relative z-10">
       <input
         type="text"
-        placeholder="Search movies..."
+        place holder="Search movies..."
         value={query}
         onChange={handleInputChange}
         className="bg-white border rounded-md px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
