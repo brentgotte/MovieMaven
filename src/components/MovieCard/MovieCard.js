@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function MovieCard({movie}) {
   return (
-    <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500">
+    <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500" suppressHydrationWarning={true}>
       <Link href={`/movie/${movie.id}`} key={movie.id}>
         <CardMedia
           className="duration-500 hover:opacity-20"

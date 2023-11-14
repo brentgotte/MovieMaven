@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import supabase from "@/api/supabaseClient";
 import page from "../movie/[id]/page";
 
-const ClaimButton = ({ movieId, session,  }) => {
-  const [claimed, setClaimed] = useState(false);
+const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
   const [user, setUser] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [watched, setWatched] = useState(false);
@@ -71,7 +70,7 @@ const ClaimButton = ({ movieId, session,  }) => {
     <div className="claim-button-container">
       <button
         onClick={() => {
-          
+          setWatched(true);
           claimMovie(false);
           
           

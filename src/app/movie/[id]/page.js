@@ -25,15 +25,39 @@ const style = {
   p: 4,
 };
 
-const watched = false;
+
 
 export default function Page() {
   const pathName = usePathname();
+  const [user, setUser] = useState(null);
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
+  const [claimed, setClaimed] = useState(false);
   // if (allGenres) console.log(allGenres);
   
+  useEffect(() => {
+    supabase.auth.getUser().then((res) => {
+      setUser(res.data.user);
+    });
+  }, []);
 
+  const storeClaimed = () => {
+    supabase.from("watchlist")
+    .update({has_watched: true})
+    .eq("movie_id", movieData?.[0]?.id)
+    .eq("user_id", user.id)
+    .then(({error}) => {
+      if (error) {
+        console.error("Error updating claim:", error);
+      } else {
+        setClaimed(true);
+      }
+    });
+  };
+
+
+
+console.log(claimed);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -120,7 +144,7 @@ export default function Page() {
               </div>
               <div>
                 <p>
-                { watched ? <AiFillEye  size={20}/> : <AiFillEyeInvisible />}
+                { claimed ? <AiFillEye  size={20}/> : <AiFillEyeInvisible />}
                 </p>
               </div>
             </div>
@@ -156,7 +180,7 @@ export default function Page() {
               </Typography>
             </div>
             <div className="flex justify-center mt-12">
-            <ClaimButton movieId={movieData?.[0]?.id}  />
+            <ClaimButton movieId={movieData?.[0]?.id} setClaimed={storeClaimed} claimed={claimed} />
             </div>
 
             <div
