@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Watchlist from './Watchlist.js';
 import supabase from '../../api/supabaseClient';
+import { CircularProgress } from '@mui/material';
 
 export default function Watchcall() {
     const [movies, setMovies] = useState([]);
@@ -32,8 +33,12 @@ export default function Watchcall() {
     const movieChunks = chunkArray(movies, 20); // Change 2 to the number of movies you want per carousel
 
     if (loading) {
-        return <div>Loading...</div>;
-    }  
+        return (
+          <div className="flex justify-center pt-72">
+            <CircularProgress />
+          </div>
+        );
+      } 
     
     return (
         <div className="hidden  justify-center mt-8 laptop:block">

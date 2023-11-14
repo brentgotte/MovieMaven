@@ -1,7 +1,7 @@
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-export const WatchListCard = ({ movie }) => {
+export default function WatchListCard({ movie }) {
   return (
     <>
       <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500">
@@ -46,4 +46,3 @@ export const WatchListCard = ({ movie }) => {
     </>
   );
 };
-export default WatchListCard;

@@ -18,7 +18,6 @@ export default function page() {
 
     getMovieData(id);
     getGenresForMovieId(id);
-    setLoading(false);
   }, [pathName]);
 
   const getMovieData = async (id) => {
@@ -51,12 +50,20 @@ export default function page() {
         } else {
           setGenres(data.map((item) => item.genres));
         }
+        setLoading(false);
       });
   };
   if (loading) {
     return (
       <div className="flex justify-center pt-72">
         <CircularProgress />
+      </div>
+    );
+  }
+  if (movieData?.length === 0 || movieData === null) {
+    return (
+      <div className="flex justify-center pt-72">
+        <h1 className="text-3xl font-bold text-center">Movie not found</h1>
       </div>
     );
   }

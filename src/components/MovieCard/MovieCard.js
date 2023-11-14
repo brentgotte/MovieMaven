@@ -12,6 +12,7 @@ export default function MovieCard({movie}) {
           sx={{ height: 510 }}
           image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           alt={movie.title}
+          
         />
       </Link>
       <div className="absolute -bottom-96 group-hover:bottom-1 right-1 left-1 transition-all duration-500 bg-[#2c2f34] dark:bg-slate-900 p-4 rounded-lg shadow dark:shadow-gray-700">
