@@ -31,6 +31,7 @@ export default function Navbar() {
           </Link>
         </div>
 
+
         <ul className="flex space-x-4">
          <li>
             <Link href="/">

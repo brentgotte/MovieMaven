@@ -5,11 +5,16 @@ import Carouselcall from "@/components/Carouselcall/Carouselcall";
 import Watchcall from "@/components/Watchlist/Watchcall";
 import Cookie from "js-cookie";
 import Footer from "@/components/Footer/Footer";
+import { useEffect, useState } from "react";
+import Cookie from "js-cookie";
 
 
 export default function Home() {
-    const isLoggedIn = Cookie.get('email') !== undefined;
+  const [email, setEmail] = useState(null);
 
+  useEffect(() => {
+    setEmail(Cookie.get("email"));
+  }, []);
 
   return (
     <>
@@ -17,8 +22,9 @@ export default function Home() {
         <h1 className="hidden text-3xl font-bold text-center mb-10 laptop:block">New And Hot</h1>
         <Carouselcall/>
         <Movielist />
-        <h1 className=" hidden text-3xl font-bold text-center mt-10 laptop:block">Your watchlist</h1>
-        {isLoggedIn ? (
+        <h1 className="text-3xl font-bold text-center mt-10">Your watchlist</h1>
+        {email !== null ? (
+
           <Watchcall />
         ) : (
           <p className="text-3xl font-bold text-center mb-10">
