@@ -69,7 +69,7 @@ export default function page() {
   }
   return (
     <>
-      <div className="flex justify-evenly items-center pt-8 px-10">
+      <div className="flex flex-col justify-evenly items-center pt-8 px-10 tablet:flex-row">
         <div className="bg-black p-3 rounded-lg">
           <Image
             className="rounded-lg"
@@ -80,7 +80,7 @@ export default function page() {
             priority
           />
         </div>
-        <div className="inline-block w-1/3 bg-black bg-opacity-20 rounded-lg p-8">
+        <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3">
           <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
             <div>
               <h1>{movieData?.[0]?.title}</h1>

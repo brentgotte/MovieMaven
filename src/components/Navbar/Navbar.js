@@ -1,5 +1,5 @@
-"use client";
-import React, { useState, useEffect } from "react";
+"use client"; 
+import React, { useState } from "react";
 import Link from "next/link";
 import Cookie from "js-cookie";
 import LogIn from "@/components/LogIn/LogIn";
@@ -7,14 +7,12 @@ import SearchBar from "../SearchBar/searchBar";
 import { MdAccountCircle } from "react-icons/md";
 
 export default function Navbar() {
-  const [email, setEmail] = useState(null);
+  const isLoggedIn = Cookie.get('email') !== undefined;
+
 
   const [searchResults, setSearchResults] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    setEmail(Cookie.get("email"));
-  }, []);
 
   const handleSearch = async (query) => {
     const response = await fetch(
@@ -28,59 +26,54 @@ export default function Navbar() {
     <>
       <div className="flex justify-between items-center p-4">
         <div className="rounded-md">
+          <Link href={"/"}>
           <img src="/Logo.png" alt="logo" id="logo" />
+          </Link>
         </div>
 
-        <div>
-          <ul className="flex space-x-4">
-            <li>
-              <Link href="/">
-                <p className="text-white hover:text-blue-400 underline">Home</p>
-              </Link>
-            </li>
-            <li>
-              <Link href="#movies">
-                <p className="text-white hover:text-blue-400 underline">
-                  Movies
-                </p>
-              </Link>
-            </li>
-            <li>
-              <Link href="#community">
-                <p className="text-white hover:text-blue-400 underline">
-                  Community
-                </p>
-              </Link>
-            </li>
-            <li>
-              <Link href="#profile">
-                <p className="text-white hover:text-blue-400 underline">
-                  Profile
-                </p>
-              </Link>
-            </li>
-          </ul>
-        </div>
+
+        <ul className="flex space-x-4">
+         <li>
+            <Link href="/">
+              <p className="text-white hover:text-blue-400 underline">Home</p>
+            </Link>
+          </li>
+          <li>
+            <Link href="/movies">
+              <p className="text-white hover:text-blue-400 underline">Movies</p>
+            </Link>
+          </li>
+          <li>
+            <Link href="/profile">
+              <p className="text-white hover:text-blue-400 underline">
+                Profile
+              </p>
+            </Link>
+          </li>
+        </ul>
 
         <SearchBar onSearch={handleSearch} searchResults={searchResults} />
 
-        {email === null ? (
-          <LogIn />
-        ) : (
-          <div className="flex items-center">
-            {selectedImage ? (
-              <img
-                src={selectedImage}
-                alt="User Avatar"
-                className="rounded-full border-2 border-white"
-                width={75}
-                height={75}
-              />
-            ) : (
-              <MdAccountCircle size={75} />
-            )}
-          </div>
-        )}
+        {isLoggedIn ? (
+  <div className="flex items-center">
+    {selectedImage ? (
+      <img
+        src={selectedImage}
+        alt="User Avatar"
+        className="rounded-full border-2 border-white"
+        width={75}
+        height={75}
+      />
+    ) : (
+      <div>
+        <MdAccountCircle size={75} />
+      </div>
+    )}
+  </div>
+) : (
+  <LogIn />
+)}
+
       </div>
     </>
   );

@@ -60,20 +60,14 @@ export default function Watchlist({ movies }) {
           </Link>
         ))}
 
-        <button
-          type="button"
-          className="absolute top-1/2 left-40 z-30 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2"
-          onClick={handlePrev}
-        >
-          <MdSkipPrevious />
+        
+        <button type="button" className="absolute top-1/2 left-80 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2" onClick={handlePrev}>
+          <MdSkipPrevious/>
         </button>
 
-        <button
-          type="button"
-          className="absolute top-1/2 right-40 z-30 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2"
-          onClick={handleNext}
-        >
-          <MdSkipNext />
+        <button type="button" className="absolute top-1/2 right-80 flex items-center justify-center w-10 h-10 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full cursor-pointer group focus:outline-none transform -translate-y-1/2" onClick={handleNext}>
+          <MdSkipNext/>
+
         </button>
         <Link href="/mylist">
           <p className="underline"> View all</p>

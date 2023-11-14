@@ -9,8 +9,9 @@ module.exports = {
   theme: {
     screens:{
       'tablet': '605px',
-
       'phone': '400px',
+      'laptop': '1024px'
+    
     },
   
     extend: {

@@ -41,7 +41,7 @@ export default function Watchcall() {
       } 
     
     return (
-        <div className="flex  justify-center mt-8">
+        <div className="hidden  justify-center mt-8 laptop:block">
             
             {movieChunks.map((chunk, idx) => (
                 <Watchlist key={idx} movies={chunk} />
