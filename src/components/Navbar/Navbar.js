@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState, useEffect } from "react";
+
 import Link from "next/link";
 import Cookie from "js-cookie";
 import LogIn from "@/components/LogIn/LogIn";
@@ -14,16 +17,16 @@ export default function Navbar() {
   useEffect(() => {
     setEmail(Cookie.get("email"));
   }, []);
-
   const handleSearch = async (query) => {
     const response = await fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=bdeba0f284b7d753826f7cb651d9cb90&language=en-US&query=${query}&page=1`
-    );
-    const data = await response.json();
-    setSearchResults(data.results);
-  };
+      );
+      const data = await response.json();
+      setSearchResults(data.results);
+    };
+    console.log(email);
 
-  return (
+    return (
     <>
       <div className="flex justify-between items-center p-4">
         <div className="rounded-md">
@@ -37,7 +40,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="#movies">
+            <Link href="/movies">
               <p className="text-white hover:text-blue-400 underline">Movies</p>
             </Link>
           </li>
@@ -49,7 +52,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="#profile">
+            <Link href="/profile">
               <p className="text-white hover:text-blue-400 underline">
                 Profile
               </p>
@@ -59,7 +62,7 @@ export default function Navbar() {
 
         <SearchBar onSearch={handleSearch} searchResults={searchResults} />
 
-        {email === null ? (
+        {email == null ? (
           <LogIn />
         ) : (
           <div className="flex items-center">
