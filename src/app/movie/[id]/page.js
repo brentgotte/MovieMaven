@@ -30,21 +30,20 @@ export default function Page() {
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
   const [loading, setLoading] = useState(true);
-  // if (allGenres) console.log(allGenres);
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const alertDiv = document.getElementById("alert");
   const alertMessage = () => {
-    let count = 0;
+    const alertDiv = document.getElementById("alert");
     setOpen(false);
-    count++;
-    if (count > 0) {
+    if (alertDiv) {
       alertDiv.classList.remove("hidden");
     }
   };
   const closeAlert = () => {
+    const alertDiv = document.getElementById("alert");
     alertDiv.classList.add("hidden");
   };
 
@@ -96,6 +95,14 @@ export default function Page() {
       </div>
     );
   }
+
+  if (movieData?.length === 0 || movieData === null) {
+    return (
+      <div className="flex justify-center pt-72">
+        <h1 className="text-3xl font-bold text-center">Movie not found</h1>
+      </div>
+    );
+  }
   return (
     <>
       <div>
@@ -105,8 +112,7 @@ export default function Page() {
               <BsCheck2Circle className="text-green-400 h-6 w-6" />
             </div>
             <div className="text-sm px-2">
-              <span className="font-semibold">Success!</span> Movie added to
-              watchlist.
+              <span>Added successfully!</span>.
             </div>
             <div className="hover:cursor-pointer">
               <AiOutlineClose onClick={closeAlert} />

@@ -60,6 +60,13 @@ export default function page() {
       </div>
     );
   }
+  if (movieData?.length === 0 || movieData === null) {
+    return (
+      <div className="flex justify-center pt-72">
+        <h1 className="text-3xl font-bold text-center">Movie not found</h1>
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex justify-evenly items-center pt-8 px-10">
