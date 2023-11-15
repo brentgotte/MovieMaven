@@ -7,6 +7,7 @@ import Cookie from "js-cookie";
 import LogIn from "@/components/LogIn/LogIn";
 import SearchBar from "../SearchBar/searchBar";
 import { MdAccountCircle } from "react-icons/md";
+import AccountDrop from "./parts/AccountDropdown/AccountDrop";
 
 export default function Navbar() {
   const [email, setEmail] = useState(null);
@@ -30,7 +31,9 @@ export default function Navbar() {
     <>
       <div className="flex justify-between items-center p-4">
         <div className="rounded-md">
+          <Link href={"/"}>
           <img src="/Logo.png" alt="logo" id="logo" />
+          </Link>
         </div>
 
         <ul className="flex space-x-4">
@@ -51,13 +54,7 @@ export default function Navbar() {
               </p>
             </Link>
           </li>
-          <li>
-            <Link href="/profile">
-              <p className="text-white hover:text-blue-400 underline">
-                Profile
-              </p>
-            </Link>
-          </li>
+          
         </ul>
 
         <SearchBar onSearch={handleSearch} searchResults={searchResults} />
@@ -75,7 +72,7 @@ export default function Navbar() {
                 height={75}
               />
             ) : (
-              <MdAccountCircle size={75} />
+              <AccountDrop />
             )}
           </div>
         )}
