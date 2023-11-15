@@ -6,8 +6,6 @@ import Watchcall from "@/components/Watchlist/Watchcall";
 import Cookie from "js-cookie";
 import Footer from "@/components/Footer/Footer";
 import { useEffect, useState } from "react";
-import Cookie from "js-cookie";
-
 
 export default function Home() {
   const [email, setEmail] = useState(null);
