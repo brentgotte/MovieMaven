@@ -6,7 +6,6 @@ import Watchcall from "@/components/Watchlist/Watchcall";
 import Cookie from "js-cookie";
 import Footer from "@/components/Footer/Footer";
 import { useEffect, useState } from "react";
-import Cookie from "js-cookie";
 
 
 export default function Home() {
@@ -31,7 +30,6 @@ export default function Home() {
             You need to log in to see your watchlist
           </p>
         )}
-        <Footer />
       </div>
     </>
   );
