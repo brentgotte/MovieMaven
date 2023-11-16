@@ -50,7 +50,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="#profile">
+            <Link href="/profile">
               <p className="text-white hover:text-blue-400 underline">
                 Profile
               </p>
