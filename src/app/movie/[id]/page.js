@@ -1,5 +1,4 @@
 "use client";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import supabase from "@/api/supabaseClient";
 import Image from "next/image";
@@ -8,8 +7,13 @@ import { BsBookmarkStar } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import { Modal, Box, Typography } from "@mui/material";
 import ClaimButton from "@/app/mylist/parts/ClaimButton";
+
+import { AiFillEye } from "react-icons/ai";
+import { AiFillEyeInvisible } from "react-icons/ai";
+
 import { BsCheck2Circle } from "react-icons/bs";
 import { CircularProgress } from "@mui/material";
+
 
 const style = {
   position: "absolute",
@@ -25,10 +29,13 @@ const style = {
   p: 4,
 };
 
-export default function Page() {
-  const pathName = usePathname();
+
+
+export default function Page({ params }) {
+  const [user, setUser] = useState(null);
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
+  const [claimed, setClaimed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
@@ -48,30 +55,35 @@ export default function Page() {
     const alertDiv = document.getElementById("alert");
     alertDiv.classList.add("hidden");
   };
-
   useEffect(() => {
-    const pathParts = pathName.split("/");
-    const id = pathParts[2];
-
+    const id = params.id;
+  
     getMovieData(id);
     getGenresForMovieId(id);
-  }, [pathName]);
 
-  const getMovieData = async (id) => {
-    const { data, error } = await supabase
-      .from("movies")
-      .select("*")
-      .eq("id", id);
+    supabase.auth.getUser()
+      .then(({data: {user}, error}) => {
+        setUser(user)
+        getClaimed(user)
+      })
+  }, [params.id]);
+  
+    const getMovieData = async (id) => {
+      const { data, error } = await supabase
+        .from("movies")
+        .select("*")
+        .eq("id", id);
+  
+      if (error) {
+        console.error("Error fetching movie data:", error);
+      } else {
+        setMovieData(data);
+      }
+    };
+  
+    const getGenresForMovieId = async (id) => {
+      supabase
 
-    if (error) {
-      console.error("Error fetching movie data:", error);
-    } else {
-      setMovieData(data);
-    }
-  };
-
-  const getGenresForMovieId = async (id) => {
-    supabase
       .from("movies_genres")
       .select(
         `
@@ -98,6 +110,57 @@ export default function Page() {
     );
   }
 
+  const getClaimed = async (user = user) => {
+    try {
+        supabase
+          .from("watchlist")
+          .select("*")
+          .eq("movie_id", params.id)
+          .eq("user_id", user.id)
+          .then(updateClaimedState);
+    } catch (error) {
+        console.error("Error checking existing claim:", error.message);
+    }
+  }
+
+  const updateClaimedState = ({ data, error }) => {
+    if (error) {
+      console.error("Error checking existing claim:", error.message);
+      return;
+    }
+
+    if (data && data.length > 0) {
+      setClaimed(true);
+    } else {
+      setClaimed(false);
+    }
+  }
+
+  const storeClaimed = (claim) => {
+    supabase.from("watchlist") 
+    .upsert({
+      has_watched: claim,
+      movie_id: params.id,
+      user_id: user.id,
+    })
+    .then(({error}) => {
+      if (error) {
+        console.error("Error updating claim:", error);
+      } else {
+        setClaimed(claim)
+      }
+    });
+  };
+
+
+
+// console.log(claimed);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+
+    
   if (movieData?.length === 0 || movieData === null) {
     return (
       <div className="flex justify-center pt-72">
@@ -136,6 +199,7 @@ export default function Page() {
           <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3 ">
             <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
               <div>
+              
                 <h1>{movieData?.[0]?.title}</h1>
               </div>
               <div className="hover:cursor-pointer">
@@ -155,6 +219,14 @@ export default function Page() {
                   {movieData?.[0]?.vote_average}
                 </p>
               </div>
+              <div className="px-3">
+                <p>|</p>
+              </div>
+              <div>
+                <p>
+                { claimed ? <AiFillEye  size={20}/> : <AiFillEyeInvisible />}
+                </p>
+              </div>
             </div>
             <div className="pt-3">
               <p className="text-gray-400 text-sm">
@@ -168,6 +240,7 @@ export default function Page() {
             </div>
             <div className="text-white pt-5">
               <p>{movieData?.[0]?.overview}</p>
+              
             </div>
           </div>
         </div>
@@ -190,10 +263,7 @@ export default function Page() {
               </Typography>
             </div>
             <div className="flex justify-center mt-12" onClick={alertMessage}>
-              <div></div>
-              <div>
-                <ClaimButton movieId={movieData?.[0]?.id} />
-              </div>
+            <ClaimButton movieId={movieData?.[0]?.id} setClaimed={storeClaimed} claimed={claimed} />
 
             </div>
 
