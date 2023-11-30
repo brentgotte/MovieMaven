@@ -38,7 +38,6 @@ export default function Page({ params }) {
   const [claimed, setClaimed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -152,12 +151,6 @@ export default function Page({ params }) {
     });
   };
 
-
-
-// console.log(claimed);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
 
     
