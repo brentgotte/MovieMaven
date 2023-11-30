@@ -39,7 +39,7 @@ export default function Movielist() {
       <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-4 px-8 md:px-16 lg:px-32'>
         {movies.map(movie => (
           <div key={movie.id}> 
-
+          
             <MovieCard movie={movie} />
           </div>
         ))}

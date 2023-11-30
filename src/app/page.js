@@ -30,7 +30,6 @@ export default function Home() {
             You need to log in to see your watchlist
           </p>
         )}
-        <Footer />
       </div>
     </>
   );
