@@ -15,6 +15,7 @@ export default function Home() {
     setEmail(Cookie.get("email"));
   }, []);
 
+  console.log(email);
   return (
     <>
       <div>
@@ -22,13 +23,13 @@ export default function Home() {
         <Carouselcall/>
         <Movielist />
         <h1 className="text-3xl font-bold text-center mt-10">Your watchlist</h1>
-        {email !== null ? (
-
-          <Watchcall />
-        ) : (
+        {email == null ? (
           <p className="text-3xl font-bold text-center mb-10">
             You need to log in to see your watchlist
           </p>
+          
+        ) : (
+          <Watchcall />
         )}
       </div>
     </>
