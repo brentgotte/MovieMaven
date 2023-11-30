@@ -1,5 +1,4 @@
 "use client";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import supabase from "@/api/supabaseClient";
 import Image from "next/image";
@@ -27,62 +26,38 @@ const style = {
 
 
 
-export default function Page() {
-  const pathName = usePathname();
+export default function Page({ params }) {
   const [user, setUser] = useState(null);
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
   const [claimed, setClaimed] = useState(false);
   // if (allGenres) console.log(allGenres);
+  useEffect(() => {
+    const id = params.id;
   
-  useEffect(() => {
-    supabase.auth.getUser().then((res) => {
-      setUser(res.data.user);
-    });
-  }, []);
-
-  const storeClaimed = () => {
-    supabase.from("watchlist")
-    .update({has_watched: true})
-    .eq("movie_id", movieData?.[0]?.id)
-    .eq("user_id", user.id)
-    .then(({error}) => {
-      if (error) {
-        console.error("Error updating claim:", error);
-      } else {
-        setClaimed(true);
-      }
-    });
-  };
-
-
-
-console.log(claimed);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  useEffect(() => {
-    const pathParts = pathName.split("/");
-    const id = pathParts[2];
-
     getMovieData(id);
     getGenresForMovieId(id);
-  }, [pathName]);
 
+    supabase.auth.getUser()
+      .then(({data: {user}, error}) => {
+        setUser(user)
+        getClaimed(user)
+      })
+  }, [params.id]);
+  
     const getMovieData = async (id) => {
       const { data, error } = await supabase
         .from("movies")
         .select("*")
         .eq("id", id);
-
+  
       if (error) {
         console.error("Error fetching movie data:", error);
       } else {
         setMovieData(data);
       }
     };
-
+  
     const getGenresForMovieId = async (id) => {
       supabase
       .from("movies_genres")
@@ -100,6 +75,56 @@ console.log(claimed);
         }
       });
     };
+
+  const getClaimed = async (user = user) => {
+    try {
+        supabase
+          .from("watchlist")
+          .select("*")
+          .eq("movie_id", params.id)
+          .eq("user_id", user.id)
+          .then(updateClaimedState);
+    } catch (error) {
+        console.error("Error checking existing claim:", error.message);
+    }
+  }
+
+  const updateClaimedState = ({ data, error }) => {
+    if (error) {
+      console.error("Error checking existing claim:", error.message);
+      return;
+    }
+
+    if (data && data.length > 0) {
+      setClaimed(true);
+    } else {
+      setClaimed(false);
+    }
+  }
+
+  const storeClaimed = (claim) => {
+    supabase.from("watchlist") 
+    .upsert({
+      has_watched: claim,
+      movie_id: params.id,
+      user_id: user.id,
+    })
+    .then(({error}) => {
+      if (error) {
+        console.error("Error updating claim:", error);
+      } else {
+        setClaimed(claim)
+      }
+    });
+  };
+
+
+
+// console.log(claimed);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
 
     
   return (

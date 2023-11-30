@@ -9,51 +9,42 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [watched, setWatched] = useState(false);
   
+  
   useEffect(() => {
     supabase.auth.getUser().then((res) => {
-      setUser(res.data.user);
-    });
-
-
-    
-    const checkExistingClaim = async () => {
-      try {
-        const { data: existingClaim, error } = await supabase
-          .from("watchlist")
-          .select("*")
-          .eq("movie_id", movieId)
-          .eq("user_id", user.id);
-
-        if (error) {
+      const user = res.data.user;
+      setUser(user);
+      return user;
+    }).then(async (user) => {
+        try {
+          if (!user) return;
+          const { data: existingClaim, error } = await supabase
+            .from("watchlist")
+            .select("*")
+            .eq("movie_id", movieId)
+            .eq("user_id", user.id);
+  
+          if (error) {
+            console.error("Error checking existing claim:", error.message);
+            return;
+          }
+  
+          if (existingClaim && existingClaim.length > 0) {
+            setClaimed(true);
+            
+          }
+        } catch (error) {
           console.error("Error checking existing claim:", error.message);
-          return;
         }
-
-        if (existingClaim && existingClaim.length > 0) {
-          setClaimed(true);
-          
-        }
-      } catch (error) {
-        console.error("Error checking existing claim:", error.message);
       }
-    };
-
-    checkExistingClaim();
-  }, [movieId, user?.id, ]);
+    )
+    
+  }, [movieId, user?.id ]);
 
   const claimMovie = async (has_watched) => {
     try {
       if (!claimed) {
-        
-        await supabase.from("watchlist").insert([
-          {
-            movie_id: movieId,
-            user_id: user.id,
-            has_watched: has_watched,
-          },
-        ]);
         setClaimed(true);
-        
         setSuccessMessage("Added successfully!");
 
       } else {
