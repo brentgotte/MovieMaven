@@ -54,6 +54,33 @@ export default function Page({ params }) {
     const alertDiv = document.getElementById("alert");
     alertDiv.classList.add("hidden");
   };
+
+  const updateClaimedState = ({ data, error }) => {
+    if (error) {
+      console.error("Error checking existing claim:", error.message);
+      return;
+    }
+
+    if (data && data.length > 0) {
+      setClaimed(true);
+    } else {
+      setClaimed(false);
+    }
+  }
+
+  const getClaimed = async (user = user) => {
+    try {
+        supabase
+          .from("watchlist")
+          .select("*")
+          .eq("movie_id", params.id)
+          .eq("user_id", user.id)
+          .then(updateClaimedState);
+    } catch (error) {
+        console.error("Error checking existing claim:", error.message);
+    }
+  }
+
   useEffect(() => {
     const id = params.id;
   
@@ -109,31 +136,7 @@ export default function Page({ params }) {
     );
   }
 
-  const getClaimed = async (user = user) => {
-    try {
-        supabase
-          .from("watchlist")
-          .select("*")
-          .eq("movie_id", params.id)
-          .eq("user_id", user.id)
-          .then(updateClaimedState);
-    } catch (error) {
-        console.error("Error checking existing claim:", error.message);
-    }
-  }
-
-  const updateClaimedState = ({ data, error }) => {
-    if (error) {
-      console.error("Error checking existing claim:", error.message);
-      return;
-    }
-
-    if (data && data.length > 0) {
-      setClaimed(true);
-    } else {
-      setClaimed(false);
-    }
-  }
+  
 
   const storeClaimed = (claim) => {
     supabase.from("watchlist") 
