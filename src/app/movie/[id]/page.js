@@ -41,6 +41,92 @@ export default function Page({ params }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const loadAndUpdateClaim = async (userId) => {
+    supabase
+      .from("watchlist")
+      .select("*")
+      .eq("movie_id", params.id)
+      .eq("user_id", userId)
+      .then(({ data, error }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+        setClaimed(data?.length > 0)
+      });
+  }
+
+  const loadAndUpdateUser = () => {
+    supabase.auth.getUser()
+      .then(({ data: { user }, error }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+        setUser(user)
+        loadAndUpdateClaim(user.id)
+      })
+  }
+
+  const loadAndUpdateMovie = async () => {
+    // select first movie with id
+    supabase
+      .from("movies")
+      .select("*")
+      .eq("id", params.id)
+      .limit(1)
+      .single()
+      .then(({ data, error }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+        setMovieData(data);
+        return;
+      });
+  };
+
+  const loadAndUpdateGenres = async () => {
+    supabase
+      .from("movies_genres")
+      .select(`genres (genre)`)
+      .eq("movie_id", params.id)
+      .then(({ error, data }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+        setGenres(data.map((item) => item.genres));
+      });
+  };
+
+
+  useEffect(() => {
+    try {
+      Promise.all([
+        loadAndUpdateMovie(),
+        loadAndUpdateGenres(),
+        loadAndUpdateUser(),
+      ]).then(() => {
+        setLoading(false);
+      });
+    } catch (error) {
+      console.error("Error loading:", error.message);
+    }
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center pt-72">
+        <CircularProgress />
+      </div>
+    );
+  }
+  if (movieData === null) {
+    return (
+      <div className="flex justify-center pt-72">
+        <h1 className="text-3xl font-bold text-center">Movie not found</h1>
+      </div>
+    );
+  }
+
+
   const alertMessage = () => {
     const alertDiv = document.getElementById("alert");
     setOpen(false);
@@ -54,113 +140,24 @@ export default function Page({ params }) {
     const alertDiv = document.getElementById("alert");
     alertDiv.classList.add("hidden");
   };
-  useEffect(() => {
-    const id = params.id;
-  
-    getMovieData(id);
-    getGenresForMovieId(id);
-
-    supabase.auth.getUser()
-      .then(({data: {user}, error}) => {
-        setUser(user)
-        getClaimed(user)
-      })
-  }, [params.id]);
-  
-    const getMovieData = async (id) => {
-      const { data, error } = await supabase
-        .from("movies")
-        .select("*")
-        .eq("id", id);
-  
-      if (error) {
-        console.error("Error fetching movie data:", error);
-      } else {
-        setMovieData(data);
-      }
-    };
-  
-    const getGenresForMovieId = async (id) => {
-      supabase
-
-      .from("movies_genres")
-      .select(
-        `
-        genres (
-          genre
-          )
-          `
-      )
-      .eq("movie_id", id)
-      .then(({ error, data }) => {
-        if (error) {
-          console.error("Error fetching genres:", error);
-        } else {
-          setGenres(data.map((item) => item.genres));
-        }
-        setLoading(false);
-      });
-  };
-  if (loading) {
-    return (
-      <div className="flex justify-center pt-72">
-        <CircularProgress />
-      </div>
-    );
-  }
-
-  const getClaimed = async (user = user) => {
-    try {
-        supabase
-          .from("watchlist")
-          .select("*")
-          .eq("movie_id", params.id)
-          .eq("user_id", user.id)
-          .then(updateClaimedState);
-    } catch (error) {
-        console.error("Error checking existing claim:", error.message);
-    }
-  }
-
-  const updateClaimedState = ({ data, error }) => {
-    if (error) {
-      console.error("Error checking existing claim:", error.message);
-      return;
-    }
-
-    if (data && data.length > 0) {
-      setClaimed(true);
-    } else {
-      setClaimed(false);
-    }
-  }
 
   const storeClaimed = (claim) => {
-    supabase.from("watchlist") 
-    .upsert({
-      has_watched: claim,
-      movie_id: params.id,
-      user_id: user.id,
-    })
-    .then(({error}) => {
-      if (error) {
-        console.error("Error updating claim:", error);
-      } else {
-        setClaimed(claim)
-      }
-    });
+    supabase.from("watchlist")
+      .upsert({
+        has_watched: claim,
+        movie_id: params.id,
+        user_id: user.id,
+      })
+      .then(({ error }) => {
+        if (error) {
+          console.error("Error updating claim:", error);
+        } else {
+          setClaimed(claim)
+        }
+      });
   };
 
 
-
-    
-  if (movieData?.length === 0 || movieData === null) {
-    return (
-      <div className="flex justify-center pt-72">
-        <h1 className="text-3xl font-bold text-center">Movie not found</h1>
-      </div>
-    );
-  }
   return (
     <>
       <div>
@@ -182,7 +179,7 @@ export default function Page({ params }) {
           <div className="bg-black p-3 rounded-lg">
             <Image
               className="rounded-lg"
-              src={`https://image.tmdb.org/t/p/w500${movieData?.[0]?.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w500${movieData?.poster_path}`}
               width={400}
               height={750}
               alt="movie poster"
@@ -192,8 +189,8 @@ export default function Page({ params }) {
           <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3 ">
             <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
               <div>
-              
-                <h1>{movieData?.[0]?.title}</h1>
+
+                <h1>{movieData?.title}</h1>
               </div>
               <div className="hover:cursor-pointer">
                 <BsBookmarkStar size={25} onClick={handleOpen} />
@@ -201,7 +198,7 @@ export default function Page({ params }) {
             </div>
             <div className="flex">
               <div>
-                <p>{movieData?.[0]?.release_date}</p>
+                <p>{movieData?.release_date}</p>
               </div>
               <div className="px-3">
                 <p>|</p>
@@ -209,7 +206,7 @@ export default function Page({ params }) {
               <div>
                 <p>
                   <AiFillStar className="inline-block items-center" />
-                  {movieData?.[0]?.vote_average}
+                  {movieData?.vote_average}
                 </p>
               </div>
               <div className="px-3">
@@ -217,7 +214,7 @@ export default function Page({ params }) {
               </div>
               <div>
                 <p>
-                { claimed ? <AiFillEye  size={20}/> : <AiFillEyeInvisible />}
+                  {claimed ? <AiFillEye size={20} /> : <AiFillEyeInvisible />}
                 </p>
               </div>
             </div>
@@ -232,8 +229,8 @@ export default function Page({ params }) {
               </p>
             </div>
             <div className="text-white pt-5">
-              <p>{movieData?.[0]?.overview}</p>
-              
+              <p>{movieData?.overview}</p>
+
             </div>
           </div>
         </div>
@@ -256,7 +253,7 @@ export default function Page({ params }) {
               </Typography>
             </div>
             <div className="flex justify-center mt-12" onClick={alertMessage}>
-            <ClaimButton movieId={movieData?.[0]?.id} setClaimed={storeClaimed} claimed={claimed} />
+              <ClaimButton movieId={params.id} setClaimed={storeClaimed} claimed={claimed} />
 
             </div>
 
