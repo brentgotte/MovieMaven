@@ -1,28 +1,32 @@
-"use client"; 
-import React, { useState } from "react";
+'use client';
+import React, { useState, useEffect } from "react";
+
 import Link from "next/link";
 import Cookie from "js-cookie";
 import LogIn from "@/components/LogIn/LogIn";
 import SearchBar from "../SearchBar/searchBar";
 import { MdAccountCircle } from "react-icons/md";
+import AccountDrop from "./parts/AccountDropdown/AccountDrop";
 
 export default function Navbar() {
-  const isLoggedIn = Cookie.get('email') !== undefined;
-
+  const [email, setEmail] = useState(null);
 
   const [searchResults, setSearchResults] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
-
+  useEffect(() => {
+    setEmail(Cookie.get("email"));
+  }, []);
   const handleSearch = async (query) => {
     const response = await fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=bdeba0f284b7d753826f7cb651d9cb90&language=en-US&query=${query}&page=1`
-    );
-    const data = await response.json();
-    setSearchResults(data.results);
-  };
+      );
+      const data = await response.json();
+      setSearchResults(data.results);
+    };
+    console.log(email);
 
-  return (
+    return (
     <>
       <div className="flex justify-between items-center p-4">
         <div className="rounded-md">
@@ -32,7 +36,7 @@ export default function Navbar() {
         </div>
 
         <ul className="flex space-x-4">
-         <li>
+          <li>
             <Link href="/">
               <p className="text-white hover:text-blue-400 underline">Home</p>
             </Link>
@@ -43,9 +47,9 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/profile">
+            <Link href="#community">
               <p className="text-white hover:text-blue-400 underline">
-                Profile
+                Community
               </p>
             </Link>
           </li>
@@ -53,26 +57,23 @@ export default function Navbar() {
 
         <SearchBar onSearch={handleSearch} searchResults={searchResults} />
 
-        {isLoggedIn ? (
-  <div className="flex items-center">
-    {selectedImage ? (
-      <img
-        src={selectedImage}
-        alt="User Avatar"
-        className="rounded-full border-2 border-white"
-        width={75}
-        height={75}
-      />
-    ) : (
-      <div>
-        <MdAccountCircle size={75} />
-      </div>
-    )}
-  </div>
-) : (
-  <LogIn />
-)}
-
+        {email == null ? (
+          <LogIn />
+        ) : (
+          <div className="flex items-center">
+            {selectedImage ? (
+              <img
+                src={selectedImage}
+                alt="User Avatar"
+                className="rounded-full border-2 border-white"
+                width={75}
+                height={75}
+              />
+            ) : (
+              <AccountDrop />
+            )}
+          </div>
+        )}
       </div>
     </>
   );

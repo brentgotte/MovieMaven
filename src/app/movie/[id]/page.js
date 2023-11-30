@@ -5,10 +5,15 @@ import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
 import { BsBookmarkStar } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { Modal, Box, Typography, TextField } from "@mui/material";
+import { Modal, Box, Typography } from "@mui/material";
 import ClaimButton from "@/app/mylist/parts/ClaimButton";
+
 import { AiFillEye } from "react-icons/ai";
 import { AiFillEyeInvisible } from "react-icons/ai";
+
+import { BsCheck2Circle } from "react-icons/bs";
+import { CircularProgress } from "@mui/material";
+
 
 const style = {
   position: "absolute",
@@ -31,7 +36,25 @@ export default function Page({ params }) {
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
   const [claimed, setClaimed] = useState(false);
-  // if (allGenres) console.log(allGenres);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const alertMessage = () => {
+    const alertDiv = document.getElementById("alert");
+    setOpen(false);
+    if (alertDiv) {
+      alertDiv.classList.remove("hidden");
+    } setTimeout(() => {
+      alertDiv.classList.add("hidden");
+    }, 2000);
+  };
+  const closeAlert = () => {
+    const alertDiv = document.getElementById("alert");
+    alertDiv.classList.add("hidden");
+  };
   useEffect(() => {
     const id = params.id;
   
@@ -60,21 +83,32 @@ export default function Page({ params }) {
   
     const getGenresForMovieId = async (id) => {
       supabase
+
       .from("movies_genres")
-      .select(`
+      .select(
+        `
         genres (
           genre
-        )
-      `)
+          )
+          `
+      )
       .eq("movie_id", id)
-      .then(({error, data}) => {
+      .then(({ error, data }) => {
         if (error) {
           console.error("Error fetching genres:", error);
         } else {
           setGenres(data.map((item) => item.genres));
         }
+        setLoading(false);
       });
-    };
+  };
+  if (loading) {
+    return (
+      <div className="flex justify-center pt-72">
+        <CircularProgress />
+      </div>
+    );
+  }
 
   const getClaimed = async (user = user) => {
     try {
@@ -127,10 +161,31 @@ export default function Page({ params }) {
 
 
     
+  if (movieData?.length === 0 || movieData === null) {
+    return (
+      <div className="flex justify-center pt-72">
+        <h1 className="text-3xl font-bold text-center">Movie not found</h1>
+      </div>
+    );
+  }
   return (
     <>
       <div>
-        <div className="flex flex-col justify-evenly items-center pt-8 px-10 tablet:flex-row">
+        <div id="alert" className="-translate-x-1/2 left-1/2 absolute hidden">
+          <div className="bg-green-100 rounded-lg p-4 text-black flex items-center">
+            <div className="flex ">
+              <BsCheck2Circle className="text-green-400 h-6 w-6" />
+            </div>
+            <div className="text-sm px-2">
+              <span>Added successfully!</span>.
+            </div>
+            <div className="hover:cursor-pointer">
+              <AiOutlineClose onClick={closeAlert} />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-evenly items-center pt-8 px-10">
+
           <div className="bg-black p-3 rounded-lg">
             <Image
               className="rounded-lg"
@@ -176,7 +231,10 @@ export default function Page({ params }) {
             <div className="pt-3">
               <p className="text-gray-400 text-sm">
                 {allGenres?.map((item) => (
-                  <span key={item.genre} className="pr-2"> {item.genre} </span>
+                  <span key={item.genre} className="pr-2">
+                    {" "}
+                    {item.genre}{" "}
+                  </span>
                 ))}
               </p>
             </div>
@@ -204,8 +262,9 @@ export default function Page({ params }) {
                 Add to watchlist!
               </Typography>
             </div>
-            <div className="flex justify-center mt-12">
+            <div className="flex justify-center mt-12" onClick={alertMessage}>
             <ClaimButton movieId={movieData?.[0]?.id} setClaimed={storeClaimed} claimed={claimed} />
+
             </div>
 
             <div

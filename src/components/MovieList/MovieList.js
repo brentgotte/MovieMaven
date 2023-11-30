@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import MovieCard from "../MovieCard/MovieCard";
 import supabase from '../../api/supabaseClient'
+import { CircularProgress } from '@mui/material';
 
 export default function Movielist() {
 
@@ -22,7 +23,11 @@ export default function Movielist() {
   
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center pt-72">
+        <CircularProgress />
+      </div>
+    );
   }
   
 
@@ -34,7 +39,7 @@ export default function Movielist() {
       <div className='grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-4 px-8 md:px-16 lg:px-32'>
         {movies.map(movie => (
           <div key={movie.id}> 
-
+          
             <MovieCard movie={movie} />
           </div>
         ))}
