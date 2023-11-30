@@ -40,7 +40,9 @@ export default function Page() {
     setOpen(false);
     if (alertDiv) {
       alertDiv.classList.remove("hidden");
-    }
+    } setTimeout(() => {
+      alertDiv.classList.add("hidden");
+    }, 2000);
   };
   const closeAlert = () => {
     const alertDiv = document.getElementById("alert");

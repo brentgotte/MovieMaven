@@ -46,15 +46,12 @@ export default function Watchlist({ movies }) {
               key={movie.movies.movie_id}
               className="w-52 h-72 shadow-lg mb-12"
             >
-              <div className="hover:opacity-25">
+              <div className="hover:opacity-25 border-2 duration-500 hover:border-black rounded-lg">
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.movies.poster_path}`}
-                  className="w-full h-full object-cover hover:cursor-pointer"
+                  className="w-full h-full object-cover hover:cursor-pointer rounded-lg"
                   alt={movie.movies.title}
                 />
-              </div>
-              <div>
-                <p>{movie.movies.title}</p>
               </div>
             </div>
           </Link>
