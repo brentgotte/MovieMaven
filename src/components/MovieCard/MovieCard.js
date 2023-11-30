@@ -49,5 +49,6 @@ export default function MovieCard({ movie }) {
         </div>
       </div>
     </div>
+    </div>
   );
 }
