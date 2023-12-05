@@ -6,7 +6,6 @@ export const Profile = () => {
     return(
         <>
             <Profilepage />
-            <Footer />
         </>
     )
 }
