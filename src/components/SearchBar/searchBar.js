@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import supabase from "../../api/supabaseClient";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
-  // const router = useRouter(); 
+  const router = useRouter(); 
   const [query, setQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -67,18 +67,18 @@ const SearchBar = () => {
   const handleMovieClick = () => {
     setQuery('');
     setShowResults(false);
-  };
+  };  
 
   const handleMatchingMoviesClick = () => {
-    // Navigate to the search results page with the search query as a query parameter
-    // router.push(`/search?query=${encodeURIComponent(query)}`);
+    // Navigate to the Movies component with the search query as a query parameter
+    router.push(`/searchResult?query=${encodeURIComponent(query)}`);
   };
 
   return (
     <div className="relative z-10">
       <input
         type="text"
-        place holder="Search movies..."
+        place-holder="Search movies..."
         value={query}
         onChange={handleInputChange}
         className="bg-white border rounded-md px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
@@ -109,7 +109,7 @@ const SearchBar = () => {
             onClick={handleMatchingMoviesClick} // Make the count clickable
             className="cursor-pointer text-blue-600"
           >
-            View movies: {matchingMoviesCount}
+            View movies: {matchingMoviesCount} 
           </p>
         </div>
       )}
