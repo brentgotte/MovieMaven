@@ -5,9 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function MovieCard({ movie }) {
-
   return (
-    <div className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500 hover:scale-105 bg-white hover:bg-black p-0.5" suppressHydrationWarning={true} >
+    <div
+      className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500 hover:scale-105 bg-white hover:bg-black p-0.5"
+      suppressHydrationWarning={true}
+    >
       <div className="hover:cursor-pointer group relative block overflow-hidden rounded-lg transition-all duration-500 hover:scale-105 bg-white hover:bg-black p-0.5">
         <div className="duration-500 hover:opacity-50">
           <Link href={`/movie/${movie.id}`} key={movie.id}>
@@ -44,7 +46,8 @@ export default function MovieCard({ movie }) {
             <div className="text-white">
               <p className="pt-3">Released: {movie.release_date}</p>
 
-            <p>Rating: {movie.vote_average}</p>
+              <p>Rating: {movie.vote_average}</p>
+            </div>
           </div>
         </div>
       </div>
