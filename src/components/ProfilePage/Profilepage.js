@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { ImArrowRight } from "react-icons/im";
-// import Watchlist from '../Watchlist/Watchlist';
+import Watchlist from '../Watchlist/Watchlist';
 import Cookie from 'js-cookie';
 import Watchcall from '../Watchlist/Watchcall';
 
@@ -34,7 +34,6 @@ export default function Profilepage() {
           </div>
           <div className="flex flex-col justify-items-start border-b-2 border-white pl-2">
             <p className="text-gray-400 pt-4">Username</p>
-            {Username ? <span className="text-white pb-6">{Username}</span> : <span className="text-white pb-6">Username not found</span>}
             <p className="text-gray-400">E-mail</p>
             {Email ? <span className="text-white pb-6">{Email}</span> : <span className="text-white pb-6">Email not found</span>}
           </div>

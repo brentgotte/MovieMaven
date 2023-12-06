@@ -1,19 +1,24 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { MdAccountCircle } from 'react-icons/md';
 import LogoutButton from '@/components/ProfilePage/parts/LogoutButton';
+import ProfilePicture from '@/components/profilePicture/profilePicture';
 
 export default function AccountDrop() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const handeProfileClick = () => {
+    setIsEditing(true);
+  };
+
   return (
     <div className="relative">
       <div className="cursor-pointer" onClick={toggleDropdown}>
-        <MdAccountCircle size={75} />
+        <ProfilePicture onClick={handeProfileClick} />
       </div>
 
       {dropdownOpen && (
@@ -27,6 +32,8 @@ export default function AccountDrop() {
           <div className='mt-2'>
               <LogoutButton />
            </div>
+           <div>
+            </div>
           </div>
         </div>
       )}
