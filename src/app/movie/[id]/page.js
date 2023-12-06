@@ -1,13 +1,19 @@
 "use client";
-import { useSearchParams, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import supabase from "@/api/supabaseClient";
 import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
 import { BsBookmarkStar } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { Modal, Box, Typography, TextField } from "@mui/material";
+import { Modal, Box, Typography } from "@mui/material";
 import ClaimButton from "@/app/mylist/parts/ClaimButton";
+
+import { AiFillEye } from "react-icons/ai";
+import { AiFillEyeInvisible } from "react-icons/ai";
+
+import { BsCheck2Circle } from "react-icons/bs";
+import { CircularProgress } from "@mui/material";
+
 
 const style = {
   position: "absolute",
@@ -23,72 +29,168 @@ const style = {
   p: 4,
 };
 
-export default function Page() {
-  const pathName = usePathname();
-  const [movieData, setMovieData] = useState(null);
 
+
+export default function Page({ params }) {
+  const [user, setUser] = useState(null);
+  const [movieData, setMovieData] = useState(null);
+  const [allGenres, setGenres] = useState(null);
+  const [claimed, setClaimed] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-    const pathParts = pathName.split("/");
-    const id = pathParts[2];
+  const loadAndUpdateClaim = async (userId) => {
+    supabase
+      .from("watchlist")
+      .select("*")
+      .eq("movie_id", params.id)
+      .eq("user_id", userId)
+      .then(({ data, error }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+        setClaimed(data?.length > 0)
+      });
+  }
 
-    const getMovieData = async () => {
-      const { data, error } = await supabase
-        .from("movies")
-        .select("*")
-        .eq("id", id);
+  const loadAndUpdateUser = () => {
+    supabase.auth.getUser()
+      .then(({ data: { user }, error }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+        setUser(user)
+        loadAndUpdateClaim(user.id)
+      })
+  }
 
-      if (error) {
-        console.error("Error fetching movie data:", error);
-      } else {
+  const loadAndUpdateMovie = async () => {
+    // select first movie with id
+    supabase
+      .from("movies")
+      .select("*")
+      .eq("id", params.id)
+      .limit(1)
+      .single()
+      .then(({ data, error }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
         setMovieData(data);
-      }
-    };
+        return;
+      });
+  };
 
-    getMovieData();
-  }, [pathName]);
-  // console.log(movieData);
+  const loadAndUpdateGenres = async () => {
+    supabase
+      .from("movies_genres")
+      .select(`genres (genre)`)
+      .eq("movie_id", params.id)
+      .then(({ error, data }) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+        setGenres(data.map((item) => item.genres));
+      });
+  };
 
-  // const [allGenres, setAllGenres] = useState(null);
 
-  // useEffect(() => {
-  //   const pathParts = pathName.split("/");
-  //   const id = pathParts[2];
+  useEffect(() => {
+    try {
+      Promise.all([
+        loadAndUpdateMovie(),
+        loadAndUpdateGenres(),
+        loadAndUpdateUser(),
+      ]).then(() => {
+        setLoading(false);
+      });
+    } catch (error) {
+      console.error("Error loading:", error.message);
+    }
+  }, [params.id]);
 
-  //   const getAllGenres = async () => {
-  //     const { data, error } = await supabase
-  //       .from("movies")
-  //       .select("genre_ids/0")
-  //       .eq("id", id);
+  if (loading) {
+    return (
+      <div className="flex justify-center pt-72">
+        <CircularProgress />
+      </div>
+    );
+  }
+  if (movieData === null) {
+    return (
+      <div className="flex justify-center pt-72">
+        <h1 className="text-3xl font-bold text-center">Movie not found</h1>
+      </div>
+    );
+  }
 
-  //     if (error) {
-  //       console.error("Error fetching movie data:", error);
-  //     } else {
-  //       setAllGenres(data);
-  //     }
-  //   };
-  //   getAllGenres();
-  //   console.log(allGenres);
-  // });
+
+  const alertMessage = () => {
+    const alertDiv = document.getElementById("alert");
+    setOpen(false);
+    if (alertDiv) {
+      alertDiv.classList.remove("hidden");
+    } setTimeout(() => {
+      alertDiv.classList.add("hidden");
+    }, 2000);
+  };
+  const closeAlert = () => {
+    const alertDiv = document.getElementById("alert");
+    alertDiv.classList.add("hidden");
+  };
+
+  const storeClaimed = (claim) => {
+    supabase.from("watchlist")
+      .upsert({
+        has_watched: claim,
+        movie_id: params.id,
+        user_id: user.id,
+      })
+      .then(({ error }) => {
+        if (error) {
+          console.error("Error updating claim:", error);
+        } else {
+          setClaimed(claim)
+        }
+      });
+  };
+
+
   return (
     <>
       <div>
+        <div id="alert" className="-translate-x-1/2 left-1/2 absolute hidden">
+          <div className="bg-green-100 rounded-lg p-4 text-black flex items-center">
+            <div className="flex ">
+              <BsCheck2Circle className="text-green-400 h-6 w-6" />
+            </div>
+            <div className="text-sm px-2">
+              <span>Added successfully!</span>.
+            </div>
+            <div className="hover:cursor-pointer">
+              <AiOutlineClose onClick={closeAlert} />
+            </div>
+          </div>
+        </div>
         <div className="flex justify-evenly items-center pt-8 px-10">
+
           <div className="bg-black p-3 rounded-lg">
             <Image
               className="rounded-lg"
-              src={`https://image.tmdb.org/t/p/w500${movieData?.[0]?.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w500${movieData?.poster_path}`}
               width={400}
               height={750}
+              alt="movie poster"
+              priority
             />
           </div>
-          <div className="inline-block w-1/3 bg-black bg-opacity-20 rounded-lg p-8">
+          <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3 ">
             <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
               <div>
-                <h1>{movieData?.[0]?.title}</h1>
+
+                <h1>{movieData?.title}</h1>
               </div>
               <div className="hover:cursor-pointer">
                 <BsBookmarkStar size={25} onClick={handleOpen} />
@@ -96,7 +198,7 @@ export default function Page() {
             </div>
             <div className="flex">
               <div>
-                <p>{movieData?.[0]?.release_date}</p>
+                <p>{movieData?.release_date}</p>
               </div>
               <div className="px-3">
                 <p>|</p>
@@ -104,12 +206,31 @@ export default function Page() {
               <div>
                 <p>
                   <AiFillStar className="inline-block items-center" />
-                  {movieData?.[0]?.vote_average}
+                  {movieData?.vote_average}
+                </p>
+              </div>
+              <div className="px-3">
+                <p>|</p>
+              </div>
+              <div>
+                <p>
+                  {claimed ? <AiFillEye size={20} /> : <AiFillEyeInvisible />}
                 </p>
               </div>
             </div>
+            <div className="pt-3">
+              <p className="text-gray-400 text-sm">
+                {allGenres?.map((item) => (
+                  <span key={item.genre} className="pr-2">
+                    {" "}
+                    {item.genre}{" "}
+                  </span>
+                ))}
+              </p>
+            </div>
             <div className="text-white pt-5">
-              <p>{movieData?.[0]?.overview}</p>
+              <p>{movieData?.overview}</p>
+
             </div>
           </div>
         </div>
@@ -131,8 +252,9 @@ export default function Page() {
                 Add to watchlist!
               </Typography>
             </div>
-            <div className="flex justify-center mt-12">
-                <ClaimButton movieId={movieData?.[0]?.id}/>
+            <div className="flex justify-center mt-12" onClick={alertMessage}>
+              <ClaimButton movieId={params.id} setClaimed={storeClaimed} claimed={claimed} />
+
             </div>
 
             <div
