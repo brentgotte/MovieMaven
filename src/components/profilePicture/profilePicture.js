@@ -72,15 +72,13 @@ export default function ProfilePicture() {
                 src={profilePictureUrl}
                 alt="User Avatar"
                 className="rounded-full border-2 border-white"
-                width={75}
-                height={75}
+                style={{ width: '75px', height: '75px', objectFit: 'cover' }}
               />
-              {/* <button onClick={clearLocalStorage}>Remove Picture</button> */}
             </div>
           ) : (
             <MdAccountCircle size={100} />
           )}
-          {/* <button onClick={() => setIsEditing(true)}>Change Picture</button> */}
+          <button onClick={() => setIsEditing(true)}>Change Picture</button>
         </>
       )}
     </>
