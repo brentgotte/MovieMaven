@@ -9,7 +9,7 @@ import { MdAccountCircle } from "react-icons/md";
 import ProfilePicture from '../profilePicture/profilePicture';
 
 export default function Navbar() {
-  const email = Cookie.get('email');
+  const [email, setEmail] = useState(null);
   const isEmailCookieSet = !!email;
   const [searchResults, setSearchResults] = useState([]);
   const profilePictureUrl = '...';
@@ -63,11 +63,11 @@ export default function Navbar() {
         )}
       </div>
        
-        )}
+      
       </div>
     </>
   );
 }
  
 
-}
+
