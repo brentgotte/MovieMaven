@@ -1,20 +1,22 @@
 "use client"
-import React, { useState } from 'react';
-import { MdAccountCircle } from "react-icons/md";
+import React, { useState, useEffect } from 'react';
 import { ImArrowRight } from "react-icons/im";
-import Watchlist from '../Watchlist/Watchlist';
+// import Watchlist from '../Watchlist/Watchlist';
 import Cookie from 'js-cookie';
 import Watchcall from '../Watchlist/Watchcall';
+
+
 import LogoutButton from './parts/LogoutButton';
 
-export default function Profilepage() {
-  const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedImage(URL.createObjectURL(file));
-    }
+export default function Profilepage() {
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+
+  const handleImageChange = (dataUrl) => {
+    setProfilePictureUrl(dataUrl);
+
+    // Save the profile picture URL to cookies
+    Cookies.set('profilePictureUrl', dataUrl, { expires: 365 }); // Cookie expires in 365 days
   };
 
   const isLoggedIn = Cookie.get('email') !== undefined;
@@ -22,37 +24,13 @@ export default function Profilepage() {
   
 
   const Email = Cookie.get('email');
-  const Username = Cookie.get('username');
   return (
 
     <>
       <div className='flex flex-row'>
         <div className="w-72 3/4 flex flex-col justify-center basis-1/6 border-r-4">
           <div className="border-b-4 border-white">
-          <div className="flex justify-center ">
-        {selectedImage ? (
-          <img
-            src={selectedImage}
-            alt="User Avatar"
-            className="rounded-full border-2 border-white"
-            width={100}
-            height={125}
-          />
-        ) : (
-          <MdAccountCircle size={100} />
-        )}
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          style={{ display: 'none' }}
-          id="avatar-input"
-        />
-        <label htmlFor="avatar-input" className="cursor-pointer text-blue-500">
-          Change Avatar
-        </label>
-      </div>
+            
           </div>
           <div className="flex flex-col justify-items-start border-b-2 border-white pl-2">
             <p className="text-gray-400 pt-4">Username</p>
@@ -91,16 +69,4 @@ export default function Profilepage() {
       </div>
     </>
   )
-}
-
-export async function getServerSideProps() {
-  const Email = Cookie.get('email');
-  const Username = Cookie.get('username');
-
-  return {
-    props: {
-      Email,
-      Username,
-    },
-  };
 }

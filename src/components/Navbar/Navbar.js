@@ -6,13 +6,13 @@ import Cookie from "js-cookie";
 import LogIn from "@/components/LogIn/LogIn";
 import SearchBar from "../SearchBar/searchBar";
 import { MdAccountCircle } from "react-icons/md";
-import AccountDrop from "./parts/AccountDropdown/AccountDrop";
+import ProfilePicture from '../profilePicture/profilePicture';
 
 export default function Navbar() {
-  const [email, setEmail] = useState(null);
-
+  const email = Cookie.get('email');
+  const isEmailCookieSet = !!email;
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const profilePictureUrl = '...';
 
   useEffect(() => {
     setEmail(Cookie.get("email"));
@@ -34,7 +34,6 @@ export default function Navbar() {
           <img src="/Logo.png" alt="logo" id="logo" />
           </Link>
         </div>
-
         <ul className="flex space-x-4">
           <li>
             <Link href="/">
@@ -55,26 +54,20 @@ export default function Navbar() {
           </li>
         </ul>
 
-        <SearchBar onSearch={handleSearch} searchResults={searchResults} />
-
-        {email == null ? (
-          <LogIn />
+    <SearchBar onSearch={handleSearch} searchResults={searchResults} />
+      <div>
+        {isEmailCookieSet ? (
+          <ProfilePicture profilePictureUrl={profilePictureUrl} />
         ) : (
-          <div className="flex items-center">
-            {selectedImage ? (
-              <img
-                src={selectedImage}
-                alt="User Avatar"
-                className="rounded-full border-2 border-white"
-                width={75}
-                height={75}
-              />
-            ) : (
-              <AccountDrop />
-            )}
-          </div>
+          <LogIn />
+        )}
+      </div>
+       
         )}
       </div>
     </>
   );
+}
+ 
+
 }
