@@ -33,7 +33,7 @@ const SearchBar = () => {
     };
 
     if (query.length > 0) {
-      fetchResults();
+      fetchResults(); 
     } else {
       setSearchResults([]);
       setTotalResults(0);
