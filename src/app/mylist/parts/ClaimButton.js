@@ -43,7 +43,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
 
   const claimMovie = async (has_watched) => {
     try {
-      if (!claimed) {
+      if (!has_watched) {
         setClaimed(true);
         setSuccessMessage("Added successfully!");
 
@@ -61,7 +61,8 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
     <div className="claim-button-container">
       <button
         onClick={() => {
-          setWatched(true);
+          setWatched(false);
+
           claimMovie(false);
           
           

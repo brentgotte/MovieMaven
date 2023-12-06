@@ -4,10 +4,12 @@ import supabase from "@/api/supabaseClient";
 import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
 import { BsBookmarkStar } from "react-icons/bs";
+import { TbBookmarkOff } from "react-icons/tb";
+import { IconContext } from "react-icons";
 import { AiOutlineClose } from "react-icons/ai";
 import { Modal, Box, Typography } from "@mui/material";
 import ClaimButton from "@/app/mylist/parts/ClaimButton";
-
+import Cookie from "js-cookie";
 import { AiFillEye } from "react-icons/ai";
 import { AiFillEyeInvisible } from "react-icons/ai";
 
@@ -32,6 +34,13 @@ const style = {
 
 
 export default function Page({ params }) {
+
+
+  useEffect(() => {
+    setEmail(Cookie.get("email"));
+  }, []);
+
+  const [email, setEmail] = useState(null);
   const [user, setUser] = useState(null);
   const [movieData, setMovieData] = useState(null);
   const [allGenres, setGenres] = useState(null);
@@ -82,6 +91,10 @@ export default function Page({ params }) {
         return;
       });
   };
+
+  const errormsg = () => {
+    alert("You need to log in to add to your watchlist")
+  }
 
   const loadAndUpdateGenres = async () => {
     supabase
@@ -193,7 +206,19 @@ export default function Page({ params }) {
                 <h1>{movieData?.title}</h1>
               </div>
               <div className="hover:cursor-pointer">
-                <BsBookmarkStar size={25} onClick={handleOpen} />
+                {
+                  email == null ? (
+                    <TbBookmarkOff />
+                  ) : claimed ? (
+                    <IconContext.Provider value={{ color: "yellow"}}>
+                      <BsBookmarkStar onClick={handleOpen} size={25} />
+                    </IconContext.Provider>
+                  ) : (
+                    <BsBookmarkStar size={25} onClick={handleOpen} />
+                  )
+                }
+
+
               </div>
             </div>
             <div className="flex">

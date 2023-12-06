@@ -7,6 +7,7 @@ import LogIn from "@/components/LogIn/LogIn";
 import SearchBar from "../SearchBar/searchBar";
 import { MdAccountCircle } from "react-icons/md";
 import ProfilePicture from '../profilePicture/profilePicture';
+import AccountDrop from "./parts/AccountDropdown/AccountDrop";
 
 export default function Navbar() {
   const [email, setEmail] = useState(null);
@@ -45,25 +46,18 @@ export default function Navbar() {
               <p className="text-white hover:text-blue-400 underline">Movies</p>
             </Link>
           </li>
-          <li>
-            <Link href="#community">
-              <p className="text-white hover:text-blue-400 underline">
-                Community
-              </p>
-            </Link>
-          </li>
+        
         </ul>
 
     <SearchBar onSearch={handleSearch} searchResults={searchResults} />
       <div>
         {isEmailCookieSet ? (
-          <ProfilePicture profilePictureUrl={profilePictureUrl} />
+          // <ProfilePicture profilePictureUrl={profilePictureUrl} />
+          <AccountDrop />
         ) : (
           <LogIn />
         )}
-      </div>
-       
-      
+      </div>      
       </div>
     </>
   );
