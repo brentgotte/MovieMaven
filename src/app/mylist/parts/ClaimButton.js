@@ -4,57 +4,51 @@ import { useState, useEffect } from "react";
 import supabase from "@/api/supabaseClient";
 import page from "../movie/[id]/page";
 
-const ClaimButton = ({ movieId, session }) => {
-  const [claimed, setClaimed] = useState(false);
+const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
   const [user, setUser] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [watched, setWatched] = useState(false);
+  
   
   useEffect(() => {
     supabase.auth.getUser().then((res) => {
-      setUser(res.data.user);
-    });
-
-
-    
-    const checkExistingClaim = async () => {
-      try {
-        const { data: existingClaim, error } = await supabase
-          .from("watchlist")
-          .select("*")
-          .eq("movie_id", movieId)
-          .eq("user_id", user.id);
-
-        if (error) {
+      const user = res.data.user;
+      setUser(user);
+      return user;
+    }).then(async (user) => {
+        try {
+          if (!user) return;
+          const { data: existingClaim, error } = await supabase
+            .from("watchlist")
+            .select("*")
+            .eq("movie_id", movieId)
+            .eq("user_id", user.id);
+  
+          if (error) {
+            console.error("Error checking existing claim:", error.message);
+            return;
+          }
+  
+          if (existingClaim && existingClaim.length > 0) {
+            setClaimed(true);
+            
+          }
+        } catch (error) {
           console.error("Error checking existing claim:", error.message);
-          return;
         }
-
-        if (existingClaim && existingClaim.length > 0) {
-          setClaimed(true);
-        }
-      } catch (error) {
-        console.error("Error checking existing claim:", error.message);
       }
-    };
-
-    checkExistingClaim();
-  }, [movieId, user?.id]);
+    )
+    
+  }, [movieId, user?.id ]);
 
   const claimMovie = async (has_watched) => {
     try {
       if (!claimed) {
-        
-        await supabase.from("watchlist").insert([
-          {
-            movie_id: movieId,
-            user_id: user.id,
-            has_watched: has_watched,
-          },
-        ]);
         setClaimed(true);
         setSuccessMessage("Added successfully!");
+
       } else {
-        setSuccessMessage("Movie is already claimed by the user.");
+        setSuccessMessage("Already added!");
       }
     } catch (error) {
       console.error("Error claiming movie:", error.message);
@@ -67,7 +61,10 @@ const ClaimButton = ({ movieId, session }) => {
     <div className="claim-button-container">
       <button
         onClick={() => {
+          setWatched(true);
           claimMovie(false);
+          
+          
           
         }}
         className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
@@ -76,7 +73,9 @@ const ClaimButton = ({ movieId, session }) => {
       </button>
       <button
         onClick={async () => {
-          await claimMovie(false);
+          
+          await claimMovie(true);
+          
          
         }}
         className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
@@ -102,3 +101,4 @@ const ClaimButton = ({ movieId, session }) => {
 };
 
 export default ClaimButton;
+

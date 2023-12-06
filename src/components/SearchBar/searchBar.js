@@ -77,6 +77,7 @@ const SearchBar = () => {
               </li>
             ))}
           </ul>
+
           {totalResults > 3 && (
             <div className="px-4 py-2 text-sm text-gray-700">
               Showing 3 of {totalResults} results
