@@ -125,23 +125,33 @@ export default function LogIn() {
                 <TextField
                   required
                   value={email}
+                  placeholder="Email"
                   onChange={(e) => setEmail(e.target.value)}
                   id="standard-input"
-                  label="Email"
                   variant="standard"
                   type="email"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleLogIn();
+                    }
+                  }}
                 />
               </div>
               <div>
                 <TextField
                   required
                   value={password}
+                  placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                   id="standard-password-input"
-                  label="Password"
                   type="password"
                   autoComplete="current-password"
                   variant="standard"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleLogIn();
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -202,34 +212,33 @@ export default function LogIn() {
                 <TextField
                   required
                   value={email}
+                  placeholder="Email"
                   onChange={(e) => setEmail(e.target.value)}
                   id="standard-input"
-                  label="Email"
                   variant="standard"
                   type="email"
-                />
-              </div>
-              <div className="pb-5">
-                <TextField
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  id="standard-input"
-                  label="Username"
-                  variant="standard"
-                  type="text"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSignUp();
+                    }
+                  }}
                 />
               </div>
               <div>
                 <TextField
                   required
                   value={password}
+                  placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                   id="standard-password-input"
-                  label="Password"
                   type="password"
                   autoComplete="current-password"
                   variant="standard"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSignUp();
+                    }
+                  }}
                 />
               </div>
             </div>
