@@ -3,7 +3,7 @@ import Movielist from "@/components/MovieList/MovieList";
 import "./globals.css";
 import Carouselcall from "@/components/Carouselcall/Carouselcall";
 import Watchcall from "@/components/Watchlist/Watchcall";
-import Cookie from "js-cookie";
+// import Cookie from "js-cookie";
 import Footer from "@/components/Footer/Footer";
 import { useEffect, useState } from "react";
 import Cookie from "js-cookie";
