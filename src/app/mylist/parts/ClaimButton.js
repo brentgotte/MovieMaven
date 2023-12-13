@@ -9,6 +9,13 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [watched, setWatched] = useState(false);
   
+
+
+
+
+
+
+  
   
   useEffect(() => {
     supabase.auth.getUser().then((res) => {
@@ -23,6 +30,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
             .select("*")
             .eq("movie_id", movieId)
             .eq("user_id", user.id);
+            console.log(watched);
   
           if (error) {
             console.error("Error checking existing claim:", error.message);
@@ -42,26 +50,57 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed  }) => {
   }, [movieId, user?.id ]);
 
   const claimMovie = async (has_watched) => {
+    if (!user) return;
     try {
-      if (!claimed) {
-        setClaimed(true);
-        setSuccessMessage("Added successfully!");
+      const { data: existingClaim, error } = await supabase
+        .from("watchlist")
+        .select("*")
+        .eq("movie_id", movieId)
+        .eq("user_id", user.id);
 
+      if (error) {
+        console.error("Error checking existing claim:", error.message);
+        return;
+      }
+
+      if (existingClaim && existingClaim.length > 0) {
+        const { error } = await supabase
+          .from("watchlist")
+          .update({ has_watched })
+          .eq("id", existingClaim[0].id);
+        if (error) {
+          console.error("Error updating claim:", error.message);
+          return;
+        }
+        setClaimed(true);
+        setSuccessMessage(has_watched ? "Marked as watched!" : "Added to watchlist!");
       } else {
-        setSuccessMessage("Already added!");
+        const { error } = await supabase.from("watchlist").insert([
+          {
+            movie_id: movieId,
+            user_id: user.id,
+            has_watched,
+          },
+        ]);
+        if (error) {
+          console.error("Error inserting claim:", error.message);
+          return;
+        }
+        setClaimed(true);
+        setSuccessMessage(has_watched ? "Marked as watched!" : "Added to watchlist!");
       }
     } catch (error) {
-      console.error("Error claiming movie:", error.message);
+      console.error("Error inserting/updating claim:", error.message);
     }
-
-
-  };
+  }
+  
 
   return (
     <div className="claim-button-container">
       <button
         onClick={() => {
-          setWatched(true);
+          setWatched(false);
+
           claimMovie(false);
           
           

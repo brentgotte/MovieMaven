@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import { useProfileData } from '../ProfileData/ProfileData';
 
-export default function ProfilePicture() {
+export default function ProfilePicture( ) {
   const { profilePictureUrl, onImageChange } = useProfileData();
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -76,9 +76,11 @@ export default function ProfilePicture() {
               />
             </div>
           ) : (
-            <MdAccountCircle size={100} />
+            <MdAccountCircle size={100}  />
           )}
+          
           <button onClick={() => setIsEditing(true)}>Change Picture</button>
+        
         </>
       )}
     </>
