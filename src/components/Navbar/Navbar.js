@@ -23,6 +23,11 @@ export default function Navbar() {
     setSearchResults(data.results);
   };
 
+  useEffect(() => {
+    setEmail(Cookie.get("email"));
+  }, []);
+
+
   return (
     <>
       <div className="flex justify-between items-center p-4">
