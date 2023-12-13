@@ -19,8 +19,6 @@ export default function Profilepage() {
 
   const isLoggedIn = Cookie.get('email') !== undefined;
 
-  
-
   const Email = Cookie.get('email');
   const Username = Cookie.get('username');
   return (

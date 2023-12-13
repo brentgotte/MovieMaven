@@ -71,8 +71,11 @@ const SearchBar = () => {
 
   const handleMatchingMoviesClick = () => {
     // Navigate to the Movies component with the search query as a query parameter
-    router.push(`/searchResult?query=${encodeURIComponent(query)}`);
+    if(query.trim() !== '') {
+      router.push(`/searchResult/${encodeURIComponent(query)}`);
+    }
   };
+  
 
   return (
     <div className="relative z-10">
