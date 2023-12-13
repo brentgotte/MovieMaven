@@ -12,17 +12,22 @@ const SearchBar = () => {
   const [totalResults, setTotalResults] = useState(0);
   const [loading, setLoading] = useState(false);
   const [matchingMoviesCount, setMatchingMoviesCount] = useState([]);
-;
 
+  const handleInputChange = (e) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+    setShowResults(newQuery.trim().length > 0);
+  };
+  
   useEffect(() => {
     const fetchResults = async () => {
-      setLoading(true);
+      if (query.length > 0) {
+        setLoading(true);
       // Fetch the count of all movies that match the query
       const { data, count, error } = await supabase
         .from('movies')
         .select('*', { count: 'exact' })
         .ilike('title', `%${query}%`);
-
       if (error) {
         console.error('error', error);
       } else {
@@ -30,15 +35,15 @@ const SearchBar = () => {
         setTotalResults(count || 0);
       }
       setLoading(false);
-    };
-
-    if (query.length > 0) {
-      fetchResults(); 
     } else {
       setSearchResults([]);
       setTotalResults(0);
+      setShowResults(false); // Hide results when query is empty
     }
-  }, [query]);
+  };
+
+  fetchResults();
+}, [query]);
 
   useEffect(() => {
     const fetchMatchingMoviesCount = async () => {
@@ -59,10 +64,10 @@ const SearchBar = () => {
     fetchMatchingMoviesCount();
   }, [query]);
 
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
-    setShowResults(true);
-  };
+  // const handleInputChange = (e) => {
+  //   setQuery(e.target.value);
+  //   setShowResults(true);
+  // };
 
   const handleMovieClick = () => {
     setQuery('');
@@ -119,6 +124,5 @@ const SearchBar = () => {
       {loading && <div className="absolute mt-1 w-full">Loading...</div>}
     </div>
   );
-};
-
-export default SearchBar;
+}
+export default SearchBar
