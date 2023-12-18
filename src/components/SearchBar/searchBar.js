@@ -93,7 +93,6 @@ const SearchBar = () => {
     }
   };
   
-
   return (
     <div ref={searchBarRef} className="relative z-10">
       <input
