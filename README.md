@@ -24,4 +24,4 @@ bun dev
 
 ## How to use the project
 
-you need to make your own account so that you can use all of the features that we have prepared. the only things that we ask from you are your email and a password. after that you'll get a email from us confirming tha it was you who wanted to make a account. after you approved the email you can do what you want like making a watchlist for example
+you need to make your own account so that you can use all of the features that we have prepared. the only things that we ask from you are your email and a password. after that you'll get a email from us confirming tha it was you who wanted to make a account. after you approved the email you can do what you want like making a watchlist for example 
