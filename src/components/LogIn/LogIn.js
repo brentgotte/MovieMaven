@@ -68,7 +68,6 @@ export default function LogIn() {
       email: email,
       password: password,
     });
-
     if (error) {
       console.error("Error signing up:", error.message);
     } else if (user) {
