@@ -2,20 +2,22 @@
 import React, { useEffect, useState } from "react";
 import supabase from "@/api/supabaseClient";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Cookie from "js-cookie";
+import ClaimButton from "@/app/mylist/parts/ClaimButton";
+
 import { AiFillStar } from "react-icons/ai";
 import { BsBookmarkStar } from "react-icons/bs";
 import { TbBookmarkOff } from "react-icons/tb";
 import { IconContext } from "react-icons";
 import { AiOutlineClose } from "react-icons/ai";
-import { Modal, Box, Typography } from "@mui/material";
-import ClaimButton from "@/app/mylist/parts/ClaimButton";
-import Cookie from "js-cookie";
 import { AiFillEye } from "react-icons/ai";
 import { AiFillEyeInvisible } from "react-icons/ai";
-
 import { BsCheck2Circle } from "react-icons/bs";
-import { CircularProgress } from "@mui/material";
 
+import { Modal, Box, Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 const style = {
   position: "absolute",
@@ -31,11 +33,7 @@ const style = {
   p: 4,
 };
 
-
-
 export default function Page({ params }) {
-
-
   useEffect(() => {
     setEmail(Cookie.get("email"));
   }, []);
@@ -60,20 +58,19 @@ export default function Page({ params }) {
         if (error) {
           throw new Error(error.message);
         }
-        setClaimed(data?.length > 0)
+        setClaimed(data?.length > 0);
       });
-  }
+  };
 
   const loadAndUpdateUser = () => {
-    supabase.auth.getUser()
-      .then(({ data: { user }, error }) => {
-        if (error) {
-          throw new Error(error.message);
-        }
-        setUser(user)
-        loadAndUpdateClaim(user.id)
-      })
-  }
+    supabase.auth.getUser().then(({ data: { user }, error }) => {
+      if (error) {
+        throw new Error(error.message);
+      }
+      setUser(user);
+      loadAndUpdateClaim(user.id);
+    });
+  };
 
   const loadAndUpdateMovie = async () => {
     // select first movie with id
@@ -93,8 +90,8 @@ export default function Page({ params }) {
   };
 
   const errormsg = () => {
-    alert("You need to log in to add to your watchlist")
-  }
+    alert("You need to log in to add to your watchlist");
+  };
 
   const loadAndUpdateGenres = async () => {
     supabase
@@ -108,7 +105,6 @@ export default function Page({ params }) {
         setGenres(data.map((item) => item.genres));
       });
   };
-
 
   useEffect(() => {
     try {
@@ -139,13 +135,13 @@ export default function Page({ params }) {
     );
   }
 
-
   const alertMessage = () => {
     const alertDiv = document.getElementById("alert");
     setOpen(false);
     if (alertDiv) {
       alertDiv.classList.remove("hidden");
-    } setTimeout(() => {
+    }
+    setTimeout(() => {
       alertDiv.classList.add("hidden");
     }, 2000);
   };
@@ -155,7 +151,8 @@ export default function Page({ params }) {
   };
 
   const storeClaimed = (claim) => {
-    supabase.from("watchlist")
+    supabase
+      .from("watchlist")
       .upsert({
         has_watched: claim,
         movie_id: params.id,
@@ -165,11 +162,38 @@ export default function Page({ params }) {
         if (error) {
           console.error("Error updating claim:", error);
         } else {
-          setClaimed(claim)
+          setClaimed(claim);
         }
       });
   };
+  const handleDelete = async (movieId) => {
+    try {
+      const loadingDiv = document.getElementById("loadingDelete");
+      loadingDiv.classList.remove("hidden");
+      const { data, error } = await supabase
+        .from("watchlist")
+        .delete()
+        .eq("movie_id", movieId)
+        .single();
 
+      if (error) {
+        console.error("Error deleting movie:", error.message);
+        return;
+      }
+
+      setMovies((prevMovies) =>
+        prevMovies.filter((movieData) => movieData?.id !== movieId)
+      );
+      loadingDiv.classList.add("hidden");
+      const alertDiv = document.getElementById("alertDelete");
+      alertDiv.classList.remove("hidden");
+      setTimeout(() => {
+        alertDiv.classList.add("hidden");
+      }, 2000);
+    } catch (error) {
+      console.error("Error deleting movie:", error.message);
+    }
+  };
 
   return (
     <>
@@ -188,7 +212,6 @@ export default function Page({ params }) {
           </div>
         </div>
         <div className="flex justify-evenly items-center pt-8 px-10">
-
           <div className="bg-black p-3 rounded-lg">
             <Image
               className="rounded-lg"
@@ -202,23 +225,26 @@ export default function Page({ params }) {
           <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3 ">
             <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
               <div>
-
                 <h1>{movieData?.title}</h1>
               </div>
               <div className="hover:cursor-pointer">
-                {
-                  email == null ? (
-                    <TbBookmarkOff />
-                  ) : claimed ? (
-                    <IconContext.Provider value={{ color: "yellow"}}>
-                      <BsBookmarkStar onClick={handleOpen} size={25} />
-                    </IconContext.Provider>
-                  ) : (
-                    <BsBookmarkStar size={25} onClick={handleOpen} />
-                  )
-                }
-
-
+                {email == null ? (
+                  <TbBookmarkOff />
+                ) : claimed ? (
+                  <IconContext.Provider value={{ color: "yellow" }}>
+                    <Tooltip title="Remove from watchlist" placement="top">
+                      <p>
+                        <BsBookmarkStar onClick={() => handleDelete(movieData?.id)} size={25} />
+                      </p>
+                    </Tooltip>
+                  </IconContext.Provider>
+                ) : (
+                  <Tooltip title="Add to watchlist" placement="top">
+                    <p>
+                      <BsBookmarkStar size={25} onClick={handleOpen} />
+                    </p>
+                  </Tooltip>
+                )}
               </div>
             </div>
             <div className="flex">
@@ -238,9 +264,19 @@ export default function Page({ params }) {
                 <p>|</p>
               </div>
               <div>
-                <p>
-                  {claimed ? <AiFillEye size={20} /> : <AiFillEyeInvisible />}
-                </p>
+                {claimed ? (
+                  <Tooltip title="Watched" placement="top">
+                    <p>
+                      <AiFillEye size={20} />{" "}
+                    </p>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Not Watched" placement="top">
+                    <p>
+                      <AiFillEyeInvisible />
+                    </p>
+                  </Tooltip>
+                )}
               </div>
             </div>
             <div className="pt-3">
@@ -255,7 +291,6 @@ export default function Page({ params }) {
             </div>
             <div className="text-white pt-5">
               <p>{movieData?.overview}</p>
-
             </div>
           </div>
         </div>
@@ -278,8 +313,11 @@ export default function Page({ params }) {
               </Typography>
             </div>
             <div className="flex justify-center mt-12" onClick={alertMessage}>
-              <ClaimButton movieId={params.id} setClaimed={storeClaimed} claimed={claimed} />
-
+              <ClaimButton
+                movieId={params.id}
+                setClaimed={storeClaimed}
+                claimed={claimed}
+              />
             </div>
 
             <div
