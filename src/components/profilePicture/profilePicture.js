@@ -13,18 +13,37 @@
           return;
         }
 
+       
         if (userData.user) {
-          const filePath = `ProfilePictures/${userData.user.id}/${selectedImage}.jpg`;
+          const filePath = `ProfilePictures/${userData.user.id}/${userData.user.profile_picture}`;
+          console.log('userData', userData);
+          console.log('filepath', filePath);
           setImageUrl(filePath);
         }
       };
 
+
+
       fetchProfilePicture();
     }, []);
+
+ 
+      supabase.from("Profilepictures")
+    .select(`*`)
+    .then((res) => {
+      const data = res.data
+      console.log( "pictures:", data);
+    });
+    
+
 
     const handleImageChange = (event) => {
       setSelectedImage(event.target.files[0]);
     };
+
+    const publicUrl = supabase.storage.from('ProfilePictures').getPublicUrl(imageUrl);
+
+    console.log('publicUrl', publicUrl);
 
     const uploadImage = async () => {
       if (!selectedImage) return;
@@ -56,7 +75,7 @@
       <div>
         <input type="file" accept="image/*" onChange={handleImageChange} />
         <button onClick={uploadImage}>Upload Image</button>
-        <img src={`https://qwjiorfvdwuxiiezpnio.supabase.co/storage/v1/object/sign/ProfilePictures/${imageUrl}`} alt="Profile" />
+       
       </div>
     );
   };
