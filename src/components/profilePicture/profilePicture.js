@@ -71,6 +71,7 @@ export default function ProfilePicture( ) {
               <img
                 src={profilePictureUrl}
                 alt="User Avatar"
+                id="profileImg"
                 className="rounded-full border-2 border-white"
                 style={{ width: '75px', height: '75px', objectFit: 'cover' }}
               />
