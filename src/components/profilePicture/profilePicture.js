@@ -103,7 +103,7 @@ import { CgProfile } from "react-icons/cg";
       <div>
         <div className='flex justify-end mr-4'>
 
-        {imageAlt == false ? ( <CgProfile onClick={toggleModal} />) : (<Image src={publicUrl.data.publicUrl} alt="Profile Picture" id='profilepic' width={100} height={200} onClick={toggleModal} />)}  
+        {imageAlt == false ? ( <CgProfile size={54} onClick={toggleModal} />) : (<Image src={publicUrl.data.publicUrl} alt="Profile Picture" id='profilepic' width={100} height={200} onClick={toggleModal} />)}  
         </div>
         {showModal && (
           <Dropdown isOpen={showModal} onClose={toggleModal}>
