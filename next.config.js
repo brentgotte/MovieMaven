@@ -4,6 +4,7 @@ const nextConfig = {}
 module.exports = nextConfig
 module.exports = {
     images: {
-      domains: ['image.tmdb.org'], // Add the domain you need here
+      domains: ['image.tmdb.org', 'qwjiorfvdwuxiiezpnio.supabase.co'], // Add the domain you need here
+      
     },
   };
