@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "autoprefixer": "latest",
+    "cypress": "^13.6.1",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "postcss": "latest",

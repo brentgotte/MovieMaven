@@ -1,5 +1,5 @@
-'use client'
-import React, { useState, useEffect } from "react";
+"use client"
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import supabase from "../../api/supabaseClient";
 import { useRouter } from "next/navigation";
@@ -12,17 +12,39 @@ const SearchBar = () => {
   const [totalResults, setTotalResults] = useState(0);
   const [loading, setLoading] = useState(false);
   const [matchingMoviesCount, setMatchingMoviesCount] = useState([]);
-;
+
+  // Ref for the search bar component
+  const searchBarRef = useRef(null);
+
+  const handleInputChange = (e) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+    setShowResults(newQuery.trim().length > 0);
+  };
+
+  // Function to close the dropdown when clicked outside
+  const handleClickOutside = (event) => {
+    if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+      setShowResults(false);
+    }
+  };
 
   useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  
+  useEffect(() => {
     const fetchResults = async () => {
-      setLoading(true);
+      if (query.length > 0) {
+        setLoading(true);
       // Fetch the count of all movies that match the query
       const { data, count, error } = await supabase
         .from('movies')
         .select('*', { count: 'exact' })
         .ilike('title', `%${query}%`);
-
       if (error) {
         console.error('error', error);
       } else {
@@ -30,15 +52,15 @@ const SearchBar = () => {
         setTotalResults(count || 0);
       }
       setLoading(false);
-    };
-
-    if (query.length > 0) {
-      fetchResults(); 
     } else {
       setSearchResults([]);
       setTotalResults(0);
+      setShowResults(false); // Hide results when query is empty
     }
-  }, [query]);
+  };
+
+  fetchResults();
+}, [query]);
 
   useEffect(() => {
     const fetchMatchingMoviesCount = async () => {
@@ -59,11 +81,6 @@ const SearchBar = () => {
     fetchMatchingMoviesCount();
   }, [query]);
 
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
-    setShowResults(true);
-  };
-
   const handleMovieClick = () => {
     setQuery('');
     setShowResults(false);
@@ -76,9 +93,8 @@ const SearchBar = () => {
     }
   };
   
-
   return (
-    <div className="relative z-10">
+    <div ref={searchBarRef} className="relative z-10">
       <input
         type="text"
         place-holder="Search movies..."
@@ -119,6 +135,5 @@ const SearchBar = () => {
       {loading && <div className="absolute mt-1 w-full">Loading...</div>}
     </div>
   );
-};
-
-export default SearchBar;
+}
+export default SearchBar

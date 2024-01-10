@@ -4,7 +4,6 @@
 import Dropdown from '../Dropdown/Dropdown';
 import LogoutButton from '../ProfilePage/parts/LogoutButton';
 import Link from 'next/link';
-// import { Dropdown } from 'flowbite-react';
 import { CgProfile } from "react-icons/cg";
 
   const ProfilePictureUpload = () => {
