@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { MdAccountCircle } from 'react-icons/md';
-import { useProfileData } from '../ProfileData/ProfileData';
+import React, { useState, useEffect } from "react";
+import { MdAccountCircle } from "react-icons/md";
+import { useProfileData } from "../ProfileData/ProfileData";
 
-export default function ProfilePicture( ) {
+export default function ProfilePicture() {
   const { profilePictureUrl, onImageChange } = useProfileData();
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   // Load the saved image URL from localStorage when the component mounts
   useEffect(() => {
-    const savedImageUrl = localStorage.getItem('profilePicture');
+    const savedImageUrl = localStorage.getItem("profilePicture");
     if (savedImageUrl) {
       onImageChange(savedImageUrl);
     }
@@ -20,11 +20,11 @@ export default function ProfilePicture( ) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const dataUrl = e.target.result;
-  
+
         // Save the image URL to localStorage
-        localStorage.setItem('profilePicture', dataUrl);
-        console.log('Image saved to localStorage:', dataUrl); // Add this line
-  
+        localStorage.setItem("profilePicture", dataUrl);
+        console.log("Image saved to localStorage:", dataUrl); // Add this line
+
         // Set the image URL in the component state
         onImageChange(dataUrl);
         setIsEditing(false);
@@ -32,7 +32,7 @@ export default function ProfilePicture( ) {
       reader.readAsDataURL(selectedImage);
     }
   };
-  
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -42,7 +42,7 @@ export default function ProfilePicture( ) {
 
   const clearLocalStorage = () => {
     // Clear the saved image URL from localStorage
-    localStorage.removeItem('profilePicture');
+    localStorage.removeItem("profilePicture");
 
     // Clear the image in the component state
     onImageChange(null);
@@ -56,7 +56,7 @@ export default function ProfilePicture( ) {
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             ref={(input) => input && input.click()}
           />
           <button className="pr-4" onClick={handleSaveImage}>
@@ -73,15 +73,16 @@ export default function ProfilePicture( ) {
                 alt="User Avatar"
                 id="profileImg"
                 className="rounded-full border-2 border-white"
-                style={{ width: '75px', height: '75px', objectFit: 'cover' }}
+                style={{ width: "75px", height: "75px", objectFit: "cover" }}
               />
             </div>
           ) : (
-            <MdAccountCircle size={100}  />
+            <div id="profileIcon">
+              <MdAccountCircle size={100} />
+            </div>
           )}
-          
+
           <button onClick={() => setIsEditing(true)}>Change Picture</button>
-        
         </>
       )}
     </>

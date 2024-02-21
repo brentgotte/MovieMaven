@@ -42,6 +42,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed }) => {
   }, [movieId, user?.id]);
 
   const claimMovie = async (has_watched) => {
+    console.log('claiming movie', movieId, has_watched);
     if (!user) return;
     try {
       const { data: existingClaim, error } = await supabase
@@ -84,6 +85,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed }) => {
         setSuccessMessage(
           has_watched ? "Marked as watched!" : "Added to watchlist!"
         );
+        console.log('finished claiming movie', movieId, has_watched);
       }
     } catch (error) {
       console.error("Error inserting/updating claim:", error.message);
@@ -94,6 +96,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed }) => {
     <div className="flex flex-col items-center">
       <div className="pb-4">
         <button
+          id="watchButton"
           onClick={() => {
             setWatched(false);
             claimMovie(false);
@@ -105,7 +108,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed }) => {
       </div>
       <div>
         <button
-          onClick={ () => {
+          onClick={() => {
             claimMovie(true);
           }}
           className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"

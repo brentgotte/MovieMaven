@@ -240,7 +240,7 @@ export default function Page({ params }) {
                   </IconContext.Provider>
                 ) : (
                   <Tooltip title="Add to watchlist" placement="top">
-                    <p>
+                    <p id="addIcon">
                       <BsBookmarkStar size={25} onClick={handleOpen} />
                     </p>
                   </Tooltip>
