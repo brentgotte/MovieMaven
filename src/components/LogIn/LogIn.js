@@ -25,6 +25,7 @@ const style = {
 
 export default function LogIn() {
   const [errorMessage, setErrorMessage] = React.useState(false);
+  const [successMessage, setSuccessMessage] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -63,17 +64,22 @@ export default function LogIn() {
       window.location.reload();
     }
   }
-
+  console.log(successMessage);
   async function handleSignUp() {
     const { user, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
-    console.log("sent")
+
+    console.log("sent");
+    // window.location.reload();
     if (error) {
       console.error("Error signing up:", error.message);
     } else if (user) {
+      setSuccessMessage(true);
       handleCloseSignUp();
+      {
+      }
     }
   }
   const closeAlert = () => {
@@ -275,6 +281,9 @@ export default function LogIn() {
                   Sign Up
                 </button>
               </div>
+              {successMessage && (
+                <p className="mt-10 text-green-500">Registered succesfully</p>
+              )}
               <hr className="my-10 h-0.5 border-t-0 bg-black opacity-5" />
               <div className="text-black text-xs">
                 Already have an account?{" "}
