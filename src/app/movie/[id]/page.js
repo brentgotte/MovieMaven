@@ -241,7 +241,7 @@ export default function Page({ params }) {
                 ) : (
                   <Tooltip title="Add to watchlist" placement="top">
                     <p>
-                      <BsBookmarkStar size={25} onClick={handleOpen} />
+                      <BsBookmarkStar size={25} onClick={handleOpen} id="addToWatchlist" />
                     </p>
                   </Tooltip>
                 )}

@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import supabase from "../../api/supabaseClient";
 import Cookie from "js-cookie";
 import { AiOutlineClose } from "react-icons/ai";
+import { BsCheck2Circle } from "react-icons/bs";
 
 const style = {
   position: "absolute",
@@ -68,12 +69,17 @@ export default function LogIn() {
       email: email,
       password: password,
     });
+    console.log("sent")
     if (error) {
       console.error("Error signing up:", error.message);
     } else if (user) {
       handleCloseSignUp();
     }
   }
+  const closeAlert = () => {
+    const alertDiv = document.getElementById("alertDelete");
+    alertDiv.classList.add("hidden");
+  };
 
   return (
     <>
@@ -184,6 +190,22 @@ export default function LogIn() {
         </Box>
       </Modal>
 
+      <div
+        id="alertDelete"
+        className="-translate-x-1/2 left-1/2 top-10 absolute hidden z-10"
+      >
+        <div className="bg-green-100 rounded-lg p-4 text-black flex items-center">
+          <div className="flex ">
+            <BsCheck2Circle className="text-green-400 h-6 w-6" />
+          </div>
+          <div className="text-sm px-2">
+            <span>Deleted successfully!</span>.
+          </div>
+          <div className="hover:cursor-pointer">
+            <AiOutlineClose onClick={closeAlert} />
+          </div>
+        </div>
+      </div>
       <Modal
         open={openSignUp}
         aria-labelledby="modal-modal-title"
@@ -247,6 +269,7 @@ export default function LogIn() {
               <div>
                 <button
                   onClick={handleSignUp}
+                  id="sign-up-button"
                   className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 duration-300 ease-in-out hover:border-blue-500 rounded"
                 >
                   Sign Up

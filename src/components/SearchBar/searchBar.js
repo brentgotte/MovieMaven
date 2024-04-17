@@ -96,6 +96,7 @@ const SearchBar = () => {
   return (
     <div ref={searchBarRef} className="relative z-10">
       <input
+        id="search-bar"
         type="text"
         place-holder="Search movies..."
         value={query}
@@ -125,6 +126,7 @@ const SearchBar = () => {
             ))}
           </ul>
           <p
+            id="movie-result-count"
             onClick={handleMatchingMoviesClick} // Make the count clickable
             className="cursor-pointer text-blue-600"
           >

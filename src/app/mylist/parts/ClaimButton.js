@@ -93,7 +93,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed }) => {
   return (
     <div className="flex flex-col items-center">
       <div className="pb-4">
-        <button
+        <button id="wantToWatchButton"
           onClick={() => {
             setWatched(false);
             claimMovie(false);
@@ -104,7 +104,7 @@ const ClaimButton = ({ movieId, session, claimed, setClaimed }) => {
         </button>
       </div>
       <div>
-        <button
+        <button id="haveWatchedButton"
           onClick={ () => {
             claimMovie(true);
           }}

@@ -27,6 +27,7 @@ export default function MovieCard({ movie }) {
               variant="h5"
               component="div"
               className="text-white font-semibold"
+              id="movieTitle"
             >
               {movie.title}
             </Typography>

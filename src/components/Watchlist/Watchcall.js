@@ -12,6 +12,7 @@ export default function Watchcall() {
         .eq('has_watched', false)
           .then((res) => {
             const data = res.data.slice(0, 20);
+            console.log(data); // This will log the data to the console
             setMovies(data);
             setLoading(false);
           });
@@ -41,7 +42,7 @@ export default function Watchcall() {
       } 
     
     return (
-        <div className="hidden  justify-center mt-8 laptop:block">
+        <div className="justify-center mt-8 laptop:block">
             
             {movieChunks.map((chunk, idx) => (
                 <Watchlist key={idx} movies={chunk} />

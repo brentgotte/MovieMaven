@@ -1,9 +1,11 @@
+const { contains } = require("cypress/types/jquery")
+
 describe('Log in functionality', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/')
 
     // Open login model
-    cy.get('button[id="open-login-modal"]').click()
+    cy.get('button').contains('Log In').click()
 
     // Assert that the login modal is open
     cy.get('[aria-labelledby="modal-modal-title"]').should('be.visible');

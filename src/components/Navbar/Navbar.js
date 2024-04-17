@@ -30,7 +30,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex justify-between items-center p-4">
+      <nav className="flex justify-between items-center p-4" id="navbar">
         <div className="rounded-md">
           <Link href={"/"}>
             <img src="/Logo.png" alt="logo" id="logo" />
@@ -47,24 +47,17 @@ export default function Navbar() {
               <p className="text-white hover:text-blue-400 underline">Movies</p>
             </Link>
           </li>
-          <li>
-            <Link href="#community">
-              <p className="text-white hover:text-blue-400 underline">
-                Community
-              </p>
-            </Link>
-          </li>
         </ul>
 
     <SearchBar onSearch={handleSearch} searchResults={searchResults} />
-      <div>
+      <div id="profilePic">
         {isEmailCookieSet ? (
           <ProfilePicture profilePictureUrl={profilePictureUrl} />
         ) : (
           <LogIn />
         )}
       </div>
-      </div>
+      </nav>
     </>
   );
 }
