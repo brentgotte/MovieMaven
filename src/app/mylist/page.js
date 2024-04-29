@@ -52,7 +52,7 @@ export default function mylist() {
       alertDiv.classList.remove("hidden");
       setTimeout(() => {
         alertDiv.classList.add("hidden");
-      }, 2000);
+      }, 3000);
     } catch (error) {
       console.error("Error deleting movie:", error.message);
     }
@@ -92,7 +92,7 @@ export default function mylist() {
           <CircularProgress />
         </div>
         {movies.map((movie) => (
-          <div key={movie.movies.id} >
+          <div key={movie.movies.id} className="watchListCard">
             <div className="border-solid border-2 rounded-t-xl">
               <WatchListCard movie={movie} />
             </div>
@@ -101,7 +101,7 @@ export default function mylist() {
                 <p>{movie.has_watched ? "Watched" : "On watchlist"}</p>
               </div>
               <div className="flex border-solid border-l-2">
-                <button
+                <button id="deleteButton"
                   className="px-3 py-1"
                   onClick={() => handleDelete(movie.movies.id)}
                 >

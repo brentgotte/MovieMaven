@@ -67,7 +67,7 @@ export default function Watchlist({ movies }) {
 
         </button>
         <Link href="/mylist">
-          <p className="underline"> View all</p>
+          <p className="underline" id="viewAllMoviesProfile"> View all</p>
         </Link>
       </div>
     </>

@@ -9,7 +9,7 @@ export default function MovieCard({ movie }) {
 
   return (
     <div
-      className="hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500 hover:scale-90 bg-white hover:bg-black p-0.5"
+      className="movieCard hover:cursor-pointer group relative block overflow-hidden rounded-md transition-all duration-500 hover:scale-90 bg-white hover:bg-black p-0.5"
       suppressHydrationWarning={true}
     >
       <div className="hover:cursor-pointer group relative block overflow-hidden rounded-lg transition-all duration-500 hover:scale-105 bg-white hover:bg-black p-0.5">
