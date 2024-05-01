@@ -52,6 +52,7 @@ describe("template spec", () => {
     cy.wait(3000);
     cy.url().should("include", "/movie/");
 
+    const chosenMovieTitle = cy.get(".movieTitle").invoke("text");
     // check of de add to watchlist button zichtbaar is door een div met een id van "addToWatchlist" te zoeken en klik erop
     cy.get("#addToWatchlist").should("be.visible");
     cy.get("#addToWatchlist").click();
@@ -111,20 +112,34 @@ describe("template spec", () => {
     cy.get(".watchListCard").eq(2).contains("Watched");
 
     cy.wait(500);
-    // get title of second movie
-    cy.get(".watchListCard")
+
+    // De tweede kaart verwijderen
+    cy.get(".cardList .watchListCard")
       .eq(1)
-      .find("#movieTitle")
       .invoke("text")
       .then((text) => {
-        const title = text;
-        expect(title).to.exist;
+        const deletedTitle = text.trim(); // Trimmen om eventuele extra witruimte te verwijderen
+        console.log("Deleted title:", deletedTitle); // Log de verwijderde titel
 
-        cy.get(".watchListCard").eq(1).find("#deleteButton").click();
-
+        cy.get(".cardList .watchListCard").eq(1).find("#deleteButton").click();
         cy.wait(1000);
-        
-        cy.contains(".watchListCard", title).should("not.exist");
+
+        // Controleren of de kaart met de verwijderde titel niet meer bestaat
+        cy.contains(".cardList .watchListCard", deletedTitle).should(
+          "not.exist"
+        );
+
+        // Controleren of de verwijderde titel aanwezig is in de overgebleven kaarten
+        cy.get(".cardList .watchListCard").each(($card) => {
+          cy.wrap($card)
+            .invoke("text")
+            .then((text) => {
+              const title = text.trim(); // Trimmen om eventuele extra witruimte te verwijderen
+              console.log("Title in card:", title); // Log de titel van elke kaart
+
+              expect(title).to.not.contain(deletedTitle);
+            });
+        });
       });
   });
 });

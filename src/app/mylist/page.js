@@ -68,7 +68,7 @@ export default function mylist() {
 
   return (
     <>
-      <div className="grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-12 px-8 md:px-16 lg:px-32">
+      <div className="cardList grid grid-cols-1 phone:grid-cols-2 tablet:grid-cols-5 gap-12 px-8 md:px-16 lg:px-32">
         <div
           id="alertDelete"
           className="-translate-x-1/2 left-1/2 top-10 absolute hidden z-10"

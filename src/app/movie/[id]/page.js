@@ -224,7 +224,7 @@ export default function Page({ params }) {
           </div>
           <div className="inline-block w-2/3 bg-black bg-opacity-20 rounded-lg p-8 tablet:w-1/3 ">
             <div className="text-white text-3xl font-bold pb-5 flex text-center justify-between">
-              <div>
+              <div className="movieTitle">
                 <h1>{movieData?.title}</h1>
               </div>
               <div className="hover:cursor-pointer">

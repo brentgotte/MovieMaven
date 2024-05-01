@@ -2,8 +2,11 @@ describe("navbar check", () => {
   it("passes", () => {
     cy.visit("http://localhost:3000/");
 
+    cy.wait(1500);
+
     cy.get('button').contains('Log In').click()
 
+    cy.wait(500);
     // Assert that the login modal is open
     cy.get('[aria-labelledby="modal-modal-title"]').should('be.visible');
 
@@ -13,6 +16,8 @@ describe("navbar check", () => {
 
     // Log in
     cy.get('button[id="login-button"]').click()
+
+    cy.wait(3000);
 
     // check of navbar zichtbaar is
     cy.get("#navbar").should("be.visible");
@@ -25,10 +30,14 @@ describe("navbar check", () => {
     cy.get("a").contains("Movies").click();
     cy.url().should("include", "/movies");
     cy.get("#navbar").should("be.visible");
+
+    cy.wait(2000);
     
     cy.get("a").contains("Home").click();
     cy.url().should("include", "/");
     cy.get("#navbar").should("be.visible");
+
+    cy.wait(2000);
 
     // check of de films zichtbaar zijn door id "movieCard" en klik daarna op de eerste film
     cy.get('#movieCard').should('be.visible');
