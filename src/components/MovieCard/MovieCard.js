@@ -6,6 +6,11 @@ import Image from "next/image";
 
 export default function MovieCard({ movie }) {
   const [hover, setHover] = useState(false);
+  
+  const imageUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+  console.log('MovieCard - movie:', movie);
+  console.log('MovieCard - poster_path:', movie.poster_path);
+  console.log('MovieCard - constructed imageUrl:', imageUrl);
 
   return (
     <div
@@ -15,7 +20,7 @@ export default function MovieCard({ movie }) {
       <div className="hover:cursor-pointer group relative block overflow-hidden rounded-lg transition-all duration-500 hover:scale-105 bg-white hover:bg-black p-0.5">
         <Link href={`/movie/${movie.id}`} key={movie.id} id="movieCard">
           <Image
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            src={imageUrl}
             className="rounded-lg"
             width={500}
             height={750}
@@ -46,7 +51,6 @@ export default function MovieCard({ movie }) {
             </Typography>
             <div className="text-white">
               <p className="pt-3">Released: {movie.release_date}</p>
-
               <p>Rating: {movie.vote_average}</p>
             </div>
           </div>

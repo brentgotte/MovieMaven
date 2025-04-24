@@ -1,10 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    images: {
+      domains: ['image.tmdb.org', 'qwjiorfvdwuxiiezpnio.supabase.co'],
+    },
+}
 
 module.exports = nextConfig
-module.exports = {
-    images: {
-      domains: ['image.tmdb.org', 'qwjiorfvdwuxiiezpnio.supabase.co'], // Add the domain you need here
-      
-    },
-  };

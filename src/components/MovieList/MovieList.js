@@ -13,6 +13,13 @@ export default function Movielist() {
 
   useEffect(() => {
     supabase.from('movies').select('*').then((res) => {
+      console.log('Database response:', res);
+      if (res.data) {
+        console.log('First movie data:', JSON.stringify(res.data[0], null, 2));
+        console.log('First movie poster_path:', res.data[0]?.poster_path);
+        console.log('First movie title:', res.data[0]?.title);
+        console.log('First movie id:', res.data[0]?.id);
+      }
       const data = res.data.slice(0, 20);
       setMovies(data);
       setLoading(false);
